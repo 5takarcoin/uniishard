@@ -59,7 +59,7 @@ function DropdownMenuDemo({
   );
 }
 
-export function SlotInput() {
+export function SlotInput({ date }: { date: Date }) {
   const [addedTasks, setAddedTasks] = useState<string[]>([]);
 
   //   const [desc, setDesc] = useState("");
@@ -71,7 +71,9 @@ export function SlotInput() {
       <DialogContent className="w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>
-          {/* <DialogDescription>Add a task and a note</DialogDescription> */}
+          <DialogDescription>
+            {date.toLocaleDateString("en-GB")}
+          </DialogDescription>
         </DialogHeader>
         <DialogDescription className="flex gap-2">
           {addedTasks.map((task: string, i: number) => (

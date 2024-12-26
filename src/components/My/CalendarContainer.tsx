@@ -16,37 +16,48 @@ export default function CalendarContainer({
   );
 }
 
-function HandleSlotClick(slot: string, day: string) {
-  console.log(`Slot: ${slot} Day: ${day}`);
-}
-
 function OneWeek() {
   return (
     <div className="flex items-start justify-between gap-2">
-      <OneDay day="Sun" />
+      {/* <OneDay day="Sun" />
       <OneDay day="Mon" />
       <OneDay day="Tue" />
       <OneDay day="Wed" />
       <OneDay day="Thu" />
       <OneDay day="Fri" />
-      <OneDay day="Sat" />
+      <OneDay day="Sat" /> */}
     </div>
   );
 }
 
-function OneDay({ day }: { day: string }) {
+function OneDay({ day }: { day: Date }) {
   const { slots } = useContext<any>(SlotsContext);
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">
-        <div className="w-32 text-center rounded-md p-2 border">{day}</div>
-        {slots.map((slot: string, i: number) => (
+        <div className="w-32 text-center rounded-md p-2 border flex flex-col text">
+          {/* <span>{day.toLocaleDateString("en-GB")}</span> */}
+          {/* <span>{Number(day)}</span> */}
+          <span>
+            {
+              [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+              ][day.getDay()]
+            }
+          </span>
+        </div>
+        {slots.map((_: string, i: number) => (
           <div
-            onClick={() => HandleSlotClick(slot, day)}
             key={i}
             className="hover:bg-gray-800 w-32 rounded-md h-12 border flex items-center justify-center"
           >
-            <SlotInput />
+            <SlotInput date={day} />
           </div>
         ))}
       </div>
@@ -126,4 +137,4 @@ function Slot({ slot }: { slot: string }) {
   );
 }
 
-export { OneWeek, Hours };
+export { OneWeek, Hours, OneDay };
