@@ -8,8 +8,16 @@ export default function CalendarContainer({
 }: {
   children?: React.ReactNode;
 }) {
+  function handleScroll(e: React.WheelEvent<HTMLDivElement>) {
+    // To Be Fixed
+    // e.preventDefault();
+    console.log(e);
+  }
   return (
-    <ScrollArea className="w-11/12 h-[400px] whitespace-nowrap rounded-md border">
+    <ScrollArea
+      onWheel={(e) => handleScroll(e)}
+      className="w-11/12 whitespace-nowrap rounded-md border"
+    >
       <div className="flex w-max space-x-2 p-4">{children}</div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

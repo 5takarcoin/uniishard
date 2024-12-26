@@ -76,21 +76,25 @@ export function SlotInput({ date }: { date: Date }) {
           </DialogDescription>
         </DialogHeader>
         <DialogDescription className="flex gap-2">
-          {addedTasks.map((task: string, i: number) => (
-            <span
-              className="flex items-center gap-2 border rounded-full py-2 pl-4 pr-2 text-xs justify-between"
-              key={i}
-            >
-              <span key={i}>{task}</span>
-              <button
-                onClick={() =>
-                  setAddedTasks(addedTasks.filter((t) => t !== task))
-                }
+          {addedTasks.length > 0 ? (
+            addedTasks.map((task: string, i: number) => (
+              <span
+                className="flex items-center gap-2 border rounded-full py-2 pl-4 pr-2 text-xs justify-between"
+                key={i}
               >
-                <X className="h-4" />
-              </button>
-            </span>
-          ))}
+                <span key={i}>{task}</span>
+                <button
+                  onClick={() =>
+                    setAddedTasks(addedTasks.filter((t) => t !== task))
+                  }
+                >
+                  <X className="h-4" />
+                </button>
+              </span>
+            ))
+          ) : (
+            <span>No tasks added</span>
+          )}
         </DialogDescription>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
