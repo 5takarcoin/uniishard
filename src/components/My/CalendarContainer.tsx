@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { SlotsContext } from "@/context/slotscontext";
 import { SlotInput } from "./SlotInput";
+import { tableType } from "@/App";
 
 export default function CalendarContainer({
   children,
@@ -16,9 +17,9 @@ export default function CalendarContainer({
   return (
     <ScrollArea
       onWheel={(e) => handleScroll(e)}
-      className="w-11/12 whitespace-nowrap rounded-md border"
+      className="w-11/12 min-h-[300px] whitespace-nowrap rounded-md border"
     >
-      <div className="flex w-max space-x-2 p-4">{children}</div>
+      <div className="flex min-h-[300px] w-full space-x-2 p-4">{children}</div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
@@ -39,7 +40,7 @@ function OneWeek() {
 }
 
 function OneDay({ day }: { day: Date }) {
-  const { slots } = useContext<any>(SlotsContext);
+  const { slots } = useContext(SlotsContext);
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">
@@ -74,8 +75,8 @@ function OneDay({ day }: { day: Date }) {
 }
 
 function minFromMidnight(time: number) {
-  let hours = Math.floor(time / 100);
-  let mins = time % 100;
+  const hours = Math.floor(time / 100);
+  const mins = time % 100;
   return hours * 60 + mins;
 }
 
@@ -87,39 +88,37 @@ function minFromMidnight(time: number) {
 
 function strTimeFromMidnight12(mins: number) {
   let hours = Math.floor(mins / 60);
-  let minutes = mins % 60;
-  let isPm = Math.floor(hours / 12) > 0;
+  const minutes = mins % 60;
+  const isPm = Math.floor(hours / 12) > 0;
   if (isPm) hours -= 12;
   if (hours === 0) hours = 12;
   return `${hours}:${minutes < 10 ? "0" : ""}${minutes} ${isPm ? "PM" : "AM"}`;
 }
 
-function Hours({
-  start = 800,
-  end = 1650,
-  interval = 10,
-  one = 80,
-}: {
-  start?: number;
-  end?: number;
-  interval?: number;
-  one?: number;
-}) {
-  const { slots, setSlots } = useContext<any>(SlotsContext);
+function Hours({ table }: { table?: tableType }) {
+  const { slots, setSlots } = useContext(SlotsContext);
+  const { start, end, interval, slotTime } = table || {
+    start: 800,
+    end: 1650,
+    interval: 10,
+    slotTime: 80,
+  };
 
   useEffect(() => {
-    let startInMin = minFromMidnight(start);
-    let endInMin = minFromMidnight(end);
-    let numberOfSlots = (endInMin - startInMin) / (interval + one);
-    let tempSlots: string[] = [];
+    const startInMin = minFromMidnight(start);
+    const endInMin = minFromMidnight(end);
+    const numberOfSlots = (endInMin - startInMin) / (interval + slotTime);
+    const tempSlots: string[] = [];
     for (let i = 0; i < numberOfSlots; i++) {
-      let timeSlot = `${strTimeFromMidnight12(
-        startInMin + i * (interval + one)
-      )} to ${strTimeFromMidnight12(startInMin + (i + 1) * (interval + one))}`;
+      const timeSlot = `${strTimeFromMidnight12(
+        startInMin + i * (interval + slotTime)
+      )} to ${strTimeFromMidnight12(
+        startInMin + (i + 1) * (interval + slotTime)
+      )}`;
       tempSlots.push(timeSlot);
     }
-    setSlots(tempSlots);
-  }, []);
+    setSlots!(tempSlots);
+  });
   return (
     <div className="flex flex-col items-center justify-between gap-2">
       <div className="w-32 text-center rounded-md p-2 border">Time</div>
