@@ -30,7 +30,7 @@ function DropdownMenuDemo({
   addedTasks: string[];
   setAddedTasks: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
-  const { tasks } = useContext<any>(SlotsContext);
+  const { tasks } = useContext(SlotsContext);
   const [selectVal, setSelectVal] = useState<number>(Date.now());
   return (
     <Select

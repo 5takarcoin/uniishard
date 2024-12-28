@@ -3,8 +3,9 @@ import { useState } from "react";
 import CalendarContainer, { Hours, OneDay } from "./CalendarContainer";
 import { Slider } from "@/components/ui/slider";
 import { tableType } from "@/App";
-import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+// import { Button } from "../ui/button";
+// import { Plus } from "lucide-react";
+import { CreateTable } from "./CreateTable";
 
 export default function Calendar({ tableData }: { tableData?: tableType }) {
   // const [numOfWeeks, setNumOfWeeks] = useState<number>(1);
@@ -40,9 +41,10 @@ export default function Calendar({ tableData }: { tableData?: tableType }) {
             </>
           ) : (
             <div className="flex items-center justify-center w-full">
-              <Button className="p-8" variant={"outline"}>
+              {/* <Button className="p-8" variant={"outline"}>
                 Create Table <Plus />
-              </Button>
+              </Button> */}
+              <CreateTable />
             </div>
           )}
         </CalendarContainer>
