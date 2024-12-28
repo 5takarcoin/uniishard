@@ -11,12 +11,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import { TimePicker12Demo } from "../ui/timepicker/time-test";
+import { TimePickerAmount, TimePickerTime } from "../ui/timepicker/time-test";
+import { useState } from "react";
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 
 export function CreateTable() {
   //   const [desc, setDesc] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,12 +32,12 @@ export function CreateTable() {
           <DialogTitle>Add Task</DialogTitle>
         </DialogHeader>
         <DialogDescription className="flex gap-2"></DialogDescription>
-        <TimePicker12Demo
-          date={new Date()}
-          setDate={(date) => {
-            console.log(date);
-          }}
-        />
+        <div>
+          <TimePickerTime date={selectedDate} setDate={setSelectedDate} />
+          <TimePickerTime date={selectedDate} setDate={setSelectedDate} />
+          <TimePickerAmount date={selectedDate} setDate={setSelectedDate} />
+          <TimePickerAmount date={selectedDate} setDate={setSelectedDate} />
+        </div>
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="default">
