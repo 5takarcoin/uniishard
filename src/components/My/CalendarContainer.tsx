@@ -97,23 +97,23 @@ function strTimeFromMidnight12(mins: number) {
 
 function Hours({ table }: { table?: tableType }) {
   const { slots, setSlots } = useContext(SlotsContext);
-  const { start, end, interval, slotTime } = table || {
+  const { start, end, interval, duration } = table || {
     start: 800,
     end: 1650,
     interval: 10,
-    slotTime: 80,
+    duration: 80,
   };
 
   useEffect(() => {
     const startInMin = minFromMidnight(start);
     const endInMin = minFromMidnight(end);
-    const numberOfSlots = (endInMin - startInMin) / (interval + slotTime);
+    const numberOfSlots = (endInMin - startInMin) / (interval + duration);
     const tempSlots: string[] = [];
     for (let i = 0; i < numberOfSlots; i++) {
       const timeSlot = `${strTimeFromMidnight12(
-        startInMin + i * (interval + slotTime)
+        startInMin + i * (interval + duration)
       )} to ${strTimeFromMidnight12(
-        startInMin + (i + 1) * (interval + slotTime)
+        startInMin + (i + 1) * (interval + duration)
       )}`;
       tempSlots.push(timeSlot);
     }

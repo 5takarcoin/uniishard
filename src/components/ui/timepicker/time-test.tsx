@@ -20,9 +20,9 @@ export function TimePickerTime({ date, setDate }: TimePickerDemoProps) {
   const periodRef = React.useRef<HTMLButtonElement>(null);
 
   return (
-    <div className="flex items-end gap-2">
-      <div className="grid gap-1 text-center">
-        <Label htmlFor="hours" className="text-xs">
+    <div className="flex items-center gap-2">
+      <div className="grid text-center">
+        <Label htmlFor="hours" className="text-xs text-gray-600">
           Hours
         </Label>
         <TimePickerInput
@@ -34,8 +34,8 @@ export function TimePickerTime({ date, setDate }: TimePickerDemoProps) {
           onRightFocus={() => minuteRef.current?.focus()}
         />
       </div>
-      <div className="grid gap-1 text-center">
-        <Label htmlFor="minutes" className="text-xs">
+      <div className="grid text-center">
+        <Label htmlFor="minutes" className="text-xs text-gray-600">
           Minutes
         </Label>
         <TimePickerInput
@@ -49,10 +49,11 @@ export function TimePickerTime({ date, setDate }: TimePickerDemoProps) {
         />
       </div>
 
-      <div className="grid gap-1 text-center">
-        <Label htmlFor="period" className="text-xs">
-          Period
-        </Label>
+      <div className="grid text-center">
+        <Label
+          htmlFor="period"
+          className="h-[1rem] text-xs text-gray-600"
+        ></Label>
         <TimePeriodSelect
           period={period}
           setPeriod={setPeriod}
@@ -73,8 +74,8 @@ export function TimePickerAmount({ date, setDate }: TimePickerDemoProps) {
 
   return (
     <div className="flex items-end gap-2">
-      <div className="grid gap-1 text-center">
-        <Label htmlFor="hours" className="text-xs">
+      <div className="grid  text-center">
+        <Label htmlFor="hours" className="text-xs text-gray-600">
           Hours
         </Label>
         <TimePickerInput
@@ -85,8 +86,8 @@ export function TimePickerAmount({ date, setDate }: TimePickerDemoProps) {
           onRightFocus={() => minuteRef.current?.focus()}
         />
       </div>
-      <div className="grid gap-1 text-center">
-        <Label htmlFor="minutes" className="text-xs">
+      <div className="grid  text-center">
+        <Label htmlFor="minutes" className="text-xs text-gray-600">
           Minutes
         </Label>
         <TimePickerInput
