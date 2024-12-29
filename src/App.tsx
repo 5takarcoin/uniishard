@@ -4,8 +4,10 @@ import { SlotsContext } from "./context/slotscontext";
 import Calendar from "./components/My/Calendar";
 import { LoginCard } from "./components/My/LogIn";
 import { Button } from "./components/ui/button";
+import { UserContext, userType } from "./context/usercontext";
 
 export interface tableType {
+  name: string;
   start: number;
   end: number;
   slotTime: number;
@@ -21,20 +23,30 @@ function formatHHMM(date1: Date) {
   return hours * 100 + minutes;
 }
 
+const demoUser: userType | null = {
+  name: "tanvir",
+  username: "5takarcoin",
+  tables: [],
+  currTable: null,
+};
+
+const tableData: tableType = {
+  name: "Bracu",
+  start: formatHHMM(new Date()),
+  end: formatHHMM(new Date()) + 6 * 60 * 60 * 1000,
+  slotTime: 80,
+  interval: 10,
+};
+
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
   const [tasks, setTasks] = useState<string[]>(["CSE111", "CSE222"]);
 
+  const [user, setUser] = useState<userType | null>(demoUser);
+  const tables: tableType[] = [tableData];
   const storage = { slots, setSlots, tasks, setTasks };
 
   const [loggedIn, setLoggedIn] = useState(false);
-
-  const tableData: tableType = {
-    start: formatHHMM(new Date()),
-    end: formatHHMM(new Date()) + 6 * 60 * 60 * 1000,
-    slotTime: 80,
-    interval: 10,
-  };
 
   console.log(tableData);
 
@@ -45,10 +57,12 @@ function App() {
       </Button>
       {loggedIn ? (
         <div className="">
-          <SlotsContext.Provider value={storage}>
-            {/* <Home /> */}
-            <Calendar />
-          </SlotsContext.Provider>
+          <UserContext.Provider value={{ user, setUser, tables }}>
+            <SlotsContext.Provider value={storage}>
+              {/* <Home /> */}
+              <Calendar tableData={user?.currTable ?? undefined} />
+            </SlotsContext.Provider>
+          </UserContext.Provider>
         </div>
       ) : (
         <div className="flex items-center justify-center h-full">
