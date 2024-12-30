@@ -34,7 +34,10 @@ const tableData: tableType = {
 
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
+  const [currTable, setCurrTable] = useState<tableType>({} as tableType);
   const [tasks, setTasks] = useState<string[]>(["CSE111", "CSE222"]);
+
+  const [isloginpage, setIsloginpage] = useState(false);
 
   const [user, setUser] = useState<userType>({} as userType);
   const tables: tableType[] = [
@@ -42,7 +45,7 @@ function App() {
     { ...tableData, name: "nsu" },
     { ...tableData, name: "aiub" },
   ];
-  const storage = { slots, setSlots, tasks, setTasks };
+  const storage = { slots, setSlots, tasks, setTasks, currTable, setCurrTable };
 
   // const [loggedIn, setLoggedIn] = useState(false);
 
@@ -59,12 +62,17 @@ function App() {
           {user.name ? (
             <div className="">
               {/* <Home /> */}
-              <Calendar tableData={user?.currTable ?? undefined} />
+              {/* <Calendar tableData={user?.currTable ?? undefined} /> */}
+              {currTable.name && <p>Halarput</p>}
+              <Calendar />
             </div>
           ) : (
             <div className="flex items-center justify-center h-full">
-              <LoginCard />
-              <SignUpCard />
+              {isloginpage ? (
+                <LoginCard sw={setIsloginpage} />
+              ) : (
+                <SignUpCard sw={setIsloginpage} />
+              )}
             </div>
           )}
         </div>

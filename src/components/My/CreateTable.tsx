@@ -17,24 +17,42 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ChevronLeft, Plus } from "lucide-react";
+import { ChevronLeft, Plus, RefreshCcw } from "lucide-react";
 import {
   TimePickerAmount,
   TimePickerTime,
 } from "@/components/ui/timepicker/time-test";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { tableType } from "@/App";
-import { UserContext } from "@/context/usercontext";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Input } from "../ui/input";
+import axios from "axios";
+import { SlotsContext } from "@/context/slotscontext";
 
 export function CreateTable() {
   const [existing, setExisting] = useState(true);
 
   //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
   const [currentTable, setCurrentTable] = useState<tableType | null>(null);
+  const { setCurrTable } = useContext(SlotsContext);
 
-  const { tables } = useContext(UserContext);
+  const [tables, setTables] = useState<tableType[]>([]);
+
+  const getData = async () => {
+    console.log("hifsf");
+    try {
+      const baseUrl = import.meta.env.VITE_BASE_URL;
+      const tables = await axios.get(`${baseUrl}/table`);
+      setTables(tables.data);
+      console.log(tables);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Dialog>
@@ -45,10 +63,10 @@ export function CreateTable() {
       </DialogTrigger>
       <DialogContent className="w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-center">Table Shape</DialogTitle>
+          <DialogTitle className="text-center mt-4">Table Shape</DialogTitle>
         </DialogHeader>
         <DialogDescription className="flex gap-2">
-          {/* {currentTable?.name} */}
+          {currentTable?.name}
         </DialogDescription>
         {!existing ? (
           <NewSchema />
@@ -70,8 +88,17 @@ export function CreateTable() {
               <Label className="h-[1rem px-2">Or</Label>
               <div className="h-[1px] bg-gray-500/50 flex-1"></div>
             </div>
-            <Label className="text-md"> Select Existing</Label>
-            <div>
+            <div className="flex items-center gap-2">
+              <Label className="text-md"> Select Existing</Label>
+              <Button
+                onClick={getData}
+                className="text-md mt-1 px-3 rounded-full"
+                variant={"ghost"}
+              >
+                <RefreshCcw />
+              </Button>
+            </div>
+            <div className="">
               <SelectExistingTable
                 currentTable={currentTable}
                 setCurrentTable={setCurrentTable}
@@ -84,7 +111,13 @@ export function CreateTable() {
         <DialogFooter>
           <div className="flex flex-row-reverse direction-reverse justify-between w-full">
             <DialogClose asChild>
-              <Button type="button" variant="default">
+              <Button
+                onClick={() => {
+                  if (setCurrTable) setCurrTable(currentTable!);
+                }}
+                type="button"
+                variant="default"
+              >
                 Save
               </Button>
             </DialogClose>
@@ -122,7 +155,6 @@ function SelectExistingTable({
       onValueChange={(value) => {
         const selectedTable = tables.find((table) => table.name === value);
         setCurrentTable(selectedTable || null);
-        console.log(currentTable);
       }}
     >
       <SelectTrigger id="popup-select-trigger" className="w-32">
@@ -145,6 +177,15 @@ function NewSchema() {
 
   return (
     <div className="flex flex-col gap-2">
+      <div>
+        <Label className="">Name</Label>
+        <span className="flex items-center gap-2">
+          <Input className="mt-1 w-2/3"></Input>
+          <div className="flex items-center gap-1 flex-row-reverse text-green-500">
+            {/* <p className="text-xs">Name exists</p> <Check /> */}
+          </div>
+        </span>
+      </div>
       <div>
         <Label>Start</Label>
         <TimePickerTime date={selectedDate} setDate={setSelectedDate} />

@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { SlotsContext } from "@/context/slotscontext";
 import { SlotInput } from "./SlotInput";
-import { tableType } from "@/App";
 
 export default function CalendarContainer({
   children,
@@ -95,14 +94,9 @@ function strTimeFromMidnight12(mins: number) {
   return `${hours}:${minutes < 10 ? "0" : ""}${minutes} ${isPm ? "PM" : "AM"}`;
 }
 
-function Hours({ table }: { table?: tableType }) {
-  const { slots, setSlots } = useContext(SlotsContext);
-  const { start, end, interval, duration } = table || {
-    start: 800,
-    end: 1650,
-    interval: 10,
-    duration: 80,
-  };
+function Hours() {
+  const { slots, setSlots, currTable } = useContext(SlotsContext);
+  const { start, end, interval, duration } = currTable;
 
   useEffect(() => {
     const startInMin = minFromMidnight(start);
@@ -113,7 +107,7 @@ function Hours({ table }: { table?: tableType }) {
       const timeSlot = `${strTimeFromMidnight12(
         startInMin + i * (interval + duration)
       )} to ${strTimeFromMidnight12(
-        startInMin + (i + 1) * (interval + duration)
+        startInMin + (i + 1) * (interval + duration) - interval
       )}`;
       tempSlots.push(timeSlot);
     }

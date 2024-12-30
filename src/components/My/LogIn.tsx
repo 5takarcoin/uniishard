@@ -11,7 +11,11 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { UserContext } from "@/context/usercontext";
 
-export function LoginCard() {
+export function LoginCard({
+  sw,
+}: {
+  sw: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -19,8 +23,7 @@ export function LoginCard() {
 
   const handleClick = async () => {
     const baseUrl = import.meta.env.VITE_BASE_URL;
-    console.log(baseUrl);
-    const got = await axios.post(`${baseUrl}/login`, {
+    const got = await axios.post(`${baseUrl}/auth/login`, {
       username,
       password,
     });
@@ -58,10 +61,20 @@ export function LoginCard() {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex flex-col justify-between">
         <Button onClick={handleClick} className="w-full">
           Log in
         </Button>
+        <p className="pt-4 text-gray-400">
+          Don't have an account?
+          <Button
+            onClick={() => sw(false)}
+            className="-ml-2 text-gray-200"
+            variant={"link"}
+          >
+            Sign up
+          </Button>
+        </p>
       </CardFooter>
     </Card>
   );

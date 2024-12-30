@@ -12,7 +12,11 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { UserContext } from "@/context/usercontext";
 
-export function SignUpCard() {
+export function SignUpCard({
+  sw,
+}: {
+  sw: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [username, setUsername] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -21,8 +25,7 @@ export function SignUpCard() {
 
   const handleClick = async () => {
     const baseUrl = import.meta.env.VITE_BASE_URL;
-    console.log(baseUrl);
-    const got = await axios.post(`${baseUrl}/signup`, {
+    const got = await axios.post(`${baseUrl}/auth/signup`, {
       username,
       password,
       name,
@@ -34,7 +37,7 @@ export function SignUpCard() {
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle className="text-center  text-xl">Log In</CardTitle>
+        <CardTitle className="text-center  text-xl">Sign up</CardTitle>
       </CardHeader>
       <CardContent>
         <form>
@@ -67,10 +70,20 @@ export function SignUpCard() {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex flex-col">
         <Button onClick={handleClick} className="w-full">
-          Log in
+          Sign up
         </Button>
+        <p className="pt-4 text-gray-400">
+          Already have an account?
+          <Button
+            onClick={() => sw(true)}
+            className="-ml-2 text-gray-200"
+            variant={"link"}
+          >
+            Log in
+          </Button>
+        </p>
       </CardFooter>
     </Card>
   );
