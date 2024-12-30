@@ -2,11 +2,11 @@ import { tableType } from "@/App";
 import { createContext } from "react";
 
 export const UserContext = createContext<{
-  user: userType | null;
-  setUser?: React.Dispatch<React.SetStateAction<userType | null>>;
+  user: userType;
+  setUser?: React.Dispatch<React.SetStateAction<userType>>;
   tables: tableType[];
 }>({
-  user: null,
+  user: {} as userType,
   tables: [],
 });
 

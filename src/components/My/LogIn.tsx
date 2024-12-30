@@ -2,42 +2,36 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { UserContext } from "@/context/usercontext";
 
 export function LoginCard() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const reqBody = {
-    date: Number(new Date()),
-    title: "from front",
-    infos: ["eta", "ota"],
-  };
+
+  const { setUser } = useContext(UserContext);
 
   const handleClick = async () => {
     const baseUrl = import.meta.env.VITE_BASE_URL;
-    const got = await axios.post(`${baseUrl}/slots`, {
-      ...reqBody,
-      title: username,
-      infos: [password],
+    console.log(baseUrl);
+    const got = await axios.post(`${baseUrl}/login`, {
+      username,
+      password,
     });
-    console.log(got.data);
+    if (setUser) {
+      setUser(got.data);
+    }
   };
   return (
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle className="text-center  text-xl">Log In</CardTitle>
-        <CardDescription>
-          {username}
-          {"  _  "}
-          {password}
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <form>

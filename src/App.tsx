@@ -3,8 +3,9 @@ import { SlotsContext } from "./context/slotscontext";
 // import Home from "./components/My/Home";
 import Calendar from "./components/My/Calendar";
 import { LoginCard } from "./components/My/LogIn";
-// import { Button } from "./components/ui/button";
+import { Button } from "./components/ui/button";
 import { UserContext, userType } from "./context/usercontext";
+import { SignUpCard } from "./components/My/SignUp";
 
 export interface tableType {
   name: string;
@@ -23,13 +24,6 @@ function formatHHMM(date1: Date) {
   return hours * 100 + minutes;
 }
 
-const demoUser: userType | null = {
-  name: "tanvir",
-  username: "5takarcoin",
-  tables: [],
-  currTable: null,
-};
-
 const tableData: tableType = {
   name: "Bracu",
   start: formatHHMM(new Date()),
@@ -42,7 +36,7 @@ function App() {
   const [slots, setSlots] = useState<string[]>([]);
   const [tasks, setTasks] = useState<string[]>(["CSE111", "CSE222"]);
 
-  const [user, setUser] = useState<userType | null>(demoUser);
+  const [user, setUser] = useState<userType>({} as userType);
   const tables: tableType[] = [
     tableData,
     { ...tableData, name: "nsu" },
@@ -52,29 +46,30 @@ function App() {
 
   // const [loggedIn, setLoggedIn] = useState(false);
 
-  console.log(tableData);
-
   return (
-    <div className="bg-gray-900 h-screen ">
-      {/* <Button onClick={() => setLoggedIn(!loggedIn)}>
-        {!loggedIn ? "Login" : "Logout"}
-      </Button> */}
-      {user ? (
-        <div className="">
-          <h1>Welcom {user.name}</h1>
-          <UserContext.Provider value={{ user, setUser, tables }}>
-            <SlotsContext.Provider value={storage}>
+    <UserContext.Provider value={{ user, setUser, tables }}>
+      <SlotsContext.Provider value={storage}>
+        <div className="bg-gray-900 h-screen ">
+          {user.name && (
+            <>
+              <h1>Welcom {user.name}</h1>
+              <Button onClick={() => setUser({} as userType)}>Logout</Button>
+            </>
+          )}
+          {user.name ? (
+            <div className="">
               {/* <Home /> */}
               <Calendar tableData={user?.currTable ?? undefined} />
-            </SlotsContext.Provider>
-          </UserContext.Provider>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <LoginCard />
+              <SignUpCard />
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <LoginCard />
-        </div>
-      )}
-    </div>
+      </SlotsContext.Provider>
+    </UserContext.Provider>
   );
 }
 
