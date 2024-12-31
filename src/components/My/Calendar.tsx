@@ -20,16 +20,16 @@ export default function Calendar() {
 
   return (
     <div className="flex flex-col">
-      <Slider
-        className="py-20 w-1/2 mx-auto"
-        defaultValue={[numOfDays]}
-        min={6}
-        max={40}
-        step={1}
-        onValueChange={(e) => setNumOfDays(e[0])}
-      />
-      {currTable.name && (
+      {currTable?.name && (
         <div className="flex flex-col w-11/12 justify-center ">
+          <Slider
+            className="py-20 w-1/2 mx-auto"
+            defaultValue={[numOfDays]}
+            min={6}
+            max={40}
+            step={1}
+            onValueChange={(e) => setNumOfDays(e[0])}
+          />
           <CalendarContainer>
             {currTable ? (
               <>

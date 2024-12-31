@@ -96,7 +96,7 @@ function strTimeFromMidnight12(mins: number) {
 
 function Hours() {
   const { slots, setSlots, currTable } = useContext(SlotsContext);
-  const { start, end, interval, duration } = currTable;
+  const { start, end, interval, duration } = currTable!;
 
   useEffect(() => {
     const startInMin = minFromMidnight(start);

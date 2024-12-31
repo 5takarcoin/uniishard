@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SlotsContext } from "./context/slotscontext";
 // import Home from "./components/My/Home";
 import Calendar from "./components/My/Calendar";
@@ -15,23 +15,6 @@ export interface tableType {
   interval: number;
 }
 
-function formatHHMM(date1: Date) {
-  const milliseconds = Number(date1);
-  const date = new Date(milliseconds);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-
-  return hours * 100 + minutes;
-}
-
-const tableData: tableType = {
-  name: "Bracu",
-  start: formatHHMM(new Date()),
-  end: formatHHMM(new Date()) + 6 * 60 * 60 * 1000,
-  duration: 80,
-  interval: 10,
-};
-
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
   const [currTable, setCurrTable] = useState<tableType>({} as tableType);
@@ -40,17 +23,16 @@ function App() {
   const [isloginpage, setIsloginpage] = useState(false);
 
   const [user, setUser] = useState<userType>({} as userType);
-  const tables: tableType[] = [
-    tableData,
-    { ...tableData, name: "nsu" },
-    { ...tableData, name: "aiub" },
-  ];
+
   const storage = { slots, setSlots, tasks, setTasks, currTable, setCurrTable };
 
   // const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    setCurrTable(user.currTable || ({} as tableType));
+  }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, tables }}>
+    <UserContext.Provider value={{ user, setUser }}>
       <SlotsContext.Provider value={storage}>
         <div className="bg-gray-900 h-screen ">
           {user.name && (
@@ -63,7 +45,7 @@ function App() {
             <div className="">
               {/* <Home /> */}
               {/* <Calendar tableData={user?.currTable ?? undefined} /> */}
-              {currTable.name && <p>Halarput</p>}
+              {currTable.name && <p>Halarput {currTable.name}</p>}
               <Calendar />
             </div>
           ) : (

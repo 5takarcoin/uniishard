@@ -18,17 +18,30 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ChevronLeft, Plus, RefreshCcw } from "lucide-react";
-import {
-  TimePickerAmount,
-  TimePickerTime,
-} from "@/components/ui/timepicker/time-test";
-import { useContext, useEffect, useState } from "react";
+import { TimePickerTime } from "@/components/ui/timepicker/time-test";
+import React, { useContext, useEffect, useState } from "react";
 import { tableType } from "@/App";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
 import axios from "axios";
 import { SlotsContext } from "@/context/slotscontext";
+import { UserContext } from "@/context/usercontext";
+
+const addSetTable = async (shape: tableType) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const got = await axios.post(`${baseUrl}/table`, shape);
+  return got.data;
+};
+
+const updateCurrTable = async (un: string, id: string) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const tab = await axios.get(`${baseUrl}table/${id}`);
+  await axios.put(`${baseUrl}user/${un}`, {
+    currTable: tab.data._id,
+  });
+  return tab.data;
+};
 
 export function CreateTable() {
   const [existing, setExisting] = useState(true);
@@ -36,11 +49,13 @@ export function CreateTable() {
   //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
   const [currentTable, setCurrentTable] = useState<tableType | null>(null);
   const { setCurrTable } = useContext(SlotsContext);
+  const { user } = useContext(UserContext);
 
   const [tables, setTables] = useState<tableType[]>([]);
 
+  const [shape, setShape] = useState<tableType>({} as tableType);
+
   const getData = async () => {
-    console.log("hifsf");
     try {
       const baseUrl = import.meta.env.VITE_BASE_URL;
       const tables = await axios.get(`${baseUrl}/table`);
@@ -66,10 +81,15 @@ export function CreateTable() {
           <DialogTitle className="text-center mt-4">Table Shape</DialogTitle>
         </DialogHeader>
         <DialogDescription className="flex gap-2">
-          {currentTable?.name}
+          Noicce
+          {shape.name}
+          {shape.start}
+          {shape.end}
+          {shape.duration}
+          {shape.interval}
         </DialogDescription>
         {!existing ? (
-          <NewSchema />
+          <NewSchema setShape={setShape} />
         ) : (
           <div className="m-auto mb-8">
             <Button
@@ -112,8 +132,15 @@ export function CreateTable() {
           <div className="flex flex-row-reverse direction-reverse justify-between w-full">
             <DialogClose asChild>
               <Button
-                onClick={() => {
-                  if (setCurrTable) setCurrTable(currentTable!);
+                onClick={async () => {
+                  if (!existing) {
+                    await addSetTable(shape);
+                    if (setCurrTable) setCurrTable(shape);
+                    await updateCurrTable(user.username, shape.name);
+                  } else {
+                    if (setCurrTable) setCurrTable(currentTable!);
+                    updateCurrTable(user.username, currentTable!.name);
+                  }
                 }}
                 type="button"
                 variant="default"
@@ -172,15 +199,56 @@ function SelectExistingTable({
   );
 }
 
-function NewSchema() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+function NewSchema({
+  setShape,
+}: {
+  setShape: React.Dispatch<React.SetStateAction<tableType>>;
+}) {
+  const [inputName, setInputName] = useState("");
+  const [selectedStartTime, setSelectedStartTime] = useState<Date | undefined>(
+    new Date(0)
+  );
+  const [selectedEndTime, setSelectedEndTime] = useState<Date | undefined>(
+    new Date(0)
+  );
+  const [selectedIntervalTime, setSelectedIntervalTime] = useState<
+    Date | undefined
+  >(new Date(0));
+  const [selectedDurationTime, setSelectedDurationTime] = useState<
+    Date | undefined
+  >(new Date(0));
+
+  useEffect(() => {
+    setShape({
+      name: inputName,
+      start: formatHHMM(selectedStartTime!),
+      end: formatHHMM(selectedEndTime!),
+      duration: formatTimeInMinutes(selectedDurationTime!),
+      interval: formatTimeInMinutes(selectedIntervalTime!),
+    });
+  }, [
+    inputName,
+    selectedDurationTime,
+    selectedEndTime,
+    selectedIntervalTime,
+    selectedStartTime,
+    setShape,
+  ]);
 
   return (
     <div className="flex flex-col gap-2">
       <div>
-        <Label className="">Name</Label>
+        <Label className="">Name {inputName}</Label>
+        <p>{formatHHMM(selectedStartTime!)}</p>
+        <p>{formatHHMM(selectedEndTime!)}</p>
+        <p>{formatTimeInMinutes(selectedDurationTime!)}</p>
+        <p>{formatTimeInMinutes(selectedIntervalTime!)}</p>
         <span className="flex items-center gap-2">
-          <Input className="mt-1 w-2/3"></Input>
+          <Input
+            value={inputName}
+            onChange={(e) => setInputName(e.target.value)}
+            className="mt-1 w-2/3"
+          ></Input>
           <div className="flex items-center gap-1 flex-row-reverse text-green-500">
             {/* <p className="text-xs">Name exists</p> <Check /> */}
           </div>
@@ -188,21 +256,46 @@ function NewSchema() {
       </div>
       <div>
         <Label>Start</Label>
-        <TimePickerTime date={selectedDate} setDate={setSelectedDate} />
+        <TimePickerTime
+          date={selectedStartTime}
+          setDate={setSelectedStartTime}
+        />
       </div>
       <div>
         <Label>End</Label>
-        <TimePickerTime date={selectedDate} setDate={setSelectedDate} />
+        <TimePickerTime date={selectedEndTime} setDate={setSelectedEndTime} />
       </div>
       <div>
         <Label>Duration</Label>
-        <TimePickerAmount date={selectedDate} setDate={setSelectedDate} />
+        <TimePickerTime
+          noPeriod
+          date={selectedDurationTime}
+          setDate={setSelectedDurationTime}
+        />
       </div>
       <div>
         <Label>Interval</Label>
-        <TimePickerAmount date={selectedDate} setDate={setSelectedDate} />
+        <TimePickerTime
+          noPeriod
+          date={selectedIntervalTime}
+          setDate={setSelectedIntervalTime}
+        />
       </div>
       <div className="mb-2"></div>
     </div>
   );
+}
+
+function formatHHMM(date: Date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return hours * 100 + minutes;
+}
+
+function formatTimeInMinutes(date: Date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return hours * 60 + minutes;
 }

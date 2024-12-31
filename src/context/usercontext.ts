@@ -4,7 +4,7 @@ import { createContext } from "react";
 export const UserContext = createContext<{
   user: userType;
   setUser?: React.Dispatch<React.SetStateAction<userType>>;
-  tables: tableType[];
+  tables?: tableType[];
 }>({
   user: {} as userType,
   tables: [],
