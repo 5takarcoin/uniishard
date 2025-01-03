@@ -29,6 +29,7 @@ export function LoginCard({
     });
     if (setUser) {
       setUser(got.data);
+      console.log(got.data);
     }
   };
   return (

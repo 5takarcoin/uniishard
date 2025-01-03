@@ -45,7 +45,6 @@ function App() {
             <div className="">
               {/* <Home /> */}
               {/* <Calendar tableData={user?.currTable ?? undefined} /> */}
-              {currTable.name && <p>Halarput {currTable.name}</p>}
               <Calendar />
             </div>
           ) : (

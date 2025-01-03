@@ -27,6 +27,7 @@ import { Input } from "../ui/input";
 import axios from "axios";
 import { SlotsContext } from "@/context/slotscontext";
 import { UserContext } from "@/context/usercontext";
+import { CalCal } from "./Calendar";
 
 const addSetTable = async (shape: tableType) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -36,16 +37,16 @@ const addSetTable = async (shape: tableType) => {
 
 const updateCurrTable = async (un: string, id: string) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const tab = await axios.get(`${baseUrl}table/${id}`);
+  const tab = await axios.get(`${baseUrl}tableStyle/${id}`);
   await axios.put(`${baseUrl}user/${un}`, {
     currTable: tab.data._id,
   });
   return tab.data;
 };
 
-export function CreateTable() {
+export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
-
+  // const { currTable } = useContext(SlotsContext);
   //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
   const [currentTable, setCurrentTable] = useState<tableType | null>(null);
   const { setCurrTable } = useContext(SlotsContext);
@@ -73,61 +74,77 @@ export function CreateTable() {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="p-8" variant="outline">
-          Create Table <Plus />
+          {change ? "Create" : "Change"} Table <Plus />
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[425px]">
+      <DialogContent
+        //  className="w-[425px]"
+        className="w-[900px] max-w-none h-[500px]"
+      >
         <DialogHeader>
-          <DialogTitle className="text-center mt-4">Table Shape</DialogTitle>
+          <DialogTitle className="text-center">Table Shape</DialogTitle>
         </DialogHeader>
-        <DialogDescription className="flex gap-2">
-          Noicce
-          {shape.name}
-          {shape.start}
-          {shape.end}
-          {shape.duration}
-          {shape.interval}
-        </DialogDescription>
-        {!existing ? (
-          <NewSchema setShape={setShape} />
-        ) : (
-          <div className="m-auto mb-8">
-            <Button
-              onClick={() => setExisting(false)}
-              className="p-8 text-sm"
-              variant="outline"
-            >
-              Create New Shape <Plus />
-            </Button>
+        <div className="flex  w-ful overflow-x-auto">
+          <div className="">
+            {!existing ? (
+              <NewSchema setShape={setShape} />
+            ) : (
+              <div className="m-auto mb-8">
+                <Button
+                  onClick={() => setExisting(false)}
+                  className="p-8 text-sm"
+                  variant="outline"
+                >
+                  Create New Shape <Plus />
+                </Button>
+              </div>
+            )}
+            {existing && (
+              <>
+                <div className="h-[1rem] flex items-center justify-between">
+                  <div className="h-[1px] bg-gray-500/50 flex-1"></div>
+                  <Label className="h-[1rem px-2">Or</Label>
+                  <div className="h-[1px] bg-gray-500/50 flex-1"></div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Label className="text-md"> Select Existing</Label>
+                  <Button
+                    onClick={getData}
+                    className="text-md mt-1 px-3 rounded-full"
+                    variant={"ghost"}
+                  >
+                    <RefreshCcw />
+                  </Button>
+                </div>
+                <div className="">
+                  <SelectExistingTable
+                    currentTable={currentTable}
+                    setCurrentTable={setCurrentTable}
+                    tables={tables}
+                  />
+                </div>
+                <div></div>
+              </>
+            )}
           </div>
-        )}
-        {existing && (
-          <>
-            <div className="h-[1rem] flex items-center justify-between">
-              <div className="h-[1px] bg-gray-500/50 flex-1"></div>
-              <Label className="h-[1rem px-2">Or</Label>
-              <div className="h-[1px] bg-gray-500/50 flex-1"></div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Label className="text-md"> Select Existing</Label>
-              <Button
-                onClick={getData}
-                className="text-md mt-1 px-3 rounded-full"
-                variant={"ghost"}
-              >
-                <RefreshCcw />
-              </Button>
-            </div>
-            <div className="">
-              <SelectExistingTable
-                currentTable={currentTable}
-                setCurrentTable={setCurrentTable}
-                tables={tables}
-              />
-            </div>
-            <div></div>
-          </>
-        )}
+          <div className="w-[1px] bg-gray-500/30 mt-4 mx-4" />
+          <div className="">
+            {/* Cursor */}
+            {shape?.name ? (
+              <CalCal currTable={shape!} />
+            ) : (
+              <div className="flex  items-center justify-center">
+                <DialogDescription className="text-center">
+                  <span className="">
+                    Select a Table <br />
+                    or <br />
+                    Create a new one
+                  </span>
+                </DialogDescription>
+              </div>
+            )}
+          </div>
+        </div>
         <DialogFooter>
           <div className="flex flex-row-reverse direction-reverse justify-between w-full">
             <DialogClose asChild>
@@ -139,7 +156,7 @@ export function CreateTable() {
                     await updateCurrTable(user.username, shape.name);
                   } else {
                     if (setCurrTable) setCurrTable(currentTable!);
-                    updateCurrTable(user.username, currentTable!.name);
+                    await updateCurrTable(user.username, currentTable!.name);
                   }
                 }}
                 type="button"
@@ -238,11 +255,11 @@ function NewSchema({
   return (
     <div className="flex flex-col gap-2">
       <div>
-        <Label className="">Name {inputName}</Label>
-        <p>{formatHHMM(selectedStartTime!)}</p>
+        <Label className="">Name</Label>
+        {/* <p>{formatHHMM(selectedStartTime!)}</p>
         <p>{formatHHMM(selectedEndTime!)}</p>
         <p>{formatTimeInMinutes(selectedDurationTime!)}</p>
-        <p>{formatTimeInMinutes(selectedIntervalTime!)}</p>
+        <p>{formatTimeInMinutes(selectedIntervalTime!)}</p> */}
         <span className="flex items-center gap-2">
           <Input
             value={inputName}
