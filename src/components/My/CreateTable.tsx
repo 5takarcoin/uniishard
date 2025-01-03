@@ -30,7 +30,7 @@ import { UserContext } from "@/context/usercontext";
 
 const addSetTable = async (shape: tableType) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const got = await axios.post(`${baseUrl}/table`, shape);
+  const got = await axios.post(`${baseUrl}/tableStyle`, shape);
   return got.data;
 };
 
@@ -58,7 +58,7 @@ export function CreateTable() {
   const getData = async () => {
     try {
       const baseUrl = import.meta.env.VITE_BASE_URL;
-      const tables = await axios.get(`${baseUrl}/table`);
+      const tables = await axios.get(`${baseUrl}/tableStyle`);
       setTables(tables.data);
       console.log(tables);
     } catch (err) {
