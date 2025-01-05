@@ -3,6 +3,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { SlotsContext } from "@/context/slotscontext";
 import { SlotInput } from "./SlotInput";
 import { tableType } from "@/App";
+import { minFromMidnight, minutesToHHMM } from "@/utils/utils";
 
 export default function CalendarContainer({
   children,
@@ -40,7 +41,7 @@ function OneWeek() {
 }
 
 function OneDay({ day }: { day: Date }) {
-  const { slots } = useContext(SlotsContext);
+  const { slots, slotsNum } = useContext(SlotsContext);
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">
@@ -61,23 +62,17 @@ function OneDay({ day }: { day: Date }) {
             }
           </span>
         </div>
-        {slots.map((_: string, i: number) => (
+        {slotsNum.map((slot: number, i: number) => (
           <div
             key={i}
             className="hover:bg-gray-800 w-32 rounded-md h-12 border flex items-center justify-center"
           >
-            <SlotInput date={day} />
+            <SlotInput date={day} slot={slot} s={slots[i]} />
           </div>
         ))}
       </div>
     </div>
   );
-}
-
-function minFromMidnight(time: number) {
-  const hours = Math.floor(time / 100);
-  const mins = time % 100;
-  return hours * 60 + mins;
 }
 
 // function timeFromMidnight(mins: number) {
@@ -96,7 +91,7 @@ function strTimeFromMidnight12(mins: number) {
 }
 
 function Hours({ currTable }: { currTable: tableType }) {
-  const { slots, setSlots } = useContext(SlotsContext);
+  const { slots, setSlots, setSlotsNum } = useContext(SlotsContext);
   const { start, end, interval, duration } = currTable!;
 
   useEffect(() => {
@@ -104,6 +99,7 @@ function Hours({ currTable }: { currTable: tableType }) {
     const endInMin = minFromMidnight(end);
     const numberOfSlots = (endInMin - startInMin) / (interval + duration);
     const tempSlots: string[] = [];
+    const tempNumSlots: number[] = [];
     for (let i = 0; i < numberOfSlots; i++) {
       const timeSlot = `${strTimeFromMidnight12(
         startInMin + i * (interval + duration)
@@ -111,7 +107,9 @@ function Hours({ currTable }: { currTable: tableType }) {
         startInMin + (i + 1) * (interval + duration) - interval
       )}`;
       tempSlots.push(timeSlot);
+      tempNumSlots.push(minutesToHHMM(startInMin + i * (interval + duration)));
     }
+    setSlotsNum!(tempNumSlots);
     setSlots!(tempSlots);
   });
   return (

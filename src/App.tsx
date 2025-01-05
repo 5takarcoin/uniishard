@@ -17,6 +17,7 @@ export interface tableType {
 
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
+  const [slotsNum, setSlotsNum] = useState<number[]>([]);
   const [currTable, setCurrTable] = useState<tableType>({} as tableType);
   const [tasks, setTasks] = useState<string[]>(["CSE111", "CSE222"]);
 
@@ -24,7 +25,16 @@ function App() {
 
   const [user, setUser] = useState<userType>({} as userType);
 
-  const storage = { slots, setSlots, tasks, setTasks, currTable, setCurrTable };
+  const storage = {
+    slots,
+    setSlots,
+    tasks,
+    setTasks,
+    currTable,
+    setCurrTable,
+    slotsNum,
+    setSlotsNum,
+  };
 
   // const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {

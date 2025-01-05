@@ -28,6 +28,7 @@ import axios from "axios";
 import { SlotsContext } from "@/context/slotscontext";
 import { UserContext } from "@/context/usercontext";
 import { CalCal } from "./Calendar";
+import { formatHHMM } from "@/utils/utils";
 
 const addSetTable = async (shape: tableType) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -301,13 +302,6 @@ function NewSchema({
       <div className="mb-2"></div>
     </div>
   );
-}
-
-function formatHHMM(date: Date) {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-
-  return hours * 100 + minutes;
 }
 
 function formatTimeInMinutes(date: Date) {

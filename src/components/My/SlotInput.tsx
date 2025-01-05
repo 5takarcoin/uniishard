@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import {
   Dialog,
   DialogClose,
@@ -16,106 +16,159 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-import { useContext, useState } from "react";
-import { X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { Plus, X } from "lucide-react";
 
-import { SlotsContext } from "@/context/slotscontext";
+import { removeIthElement } from "@/utils/utils";
 
-function DropdownMenuDemo({
-  addedTasks,
-  setAddedTasks,
-}: {
-  addedTasks: string[];
-  setAddedTasks: React.Dispatch<React.SetStateAction<string[]>>;
-}) {
-  const { tasks } = useContext(SlotsContext);
-  const [selectVal, setSelectVal] = useState<number>(Date.now());
-  return (
-    <Select
-      key={selectVal}
-      onValueChange={(value) => {
-        setSelectVal(Date.now());
-        setAddedTasks([...addedTasks, value]);
-      }}
-    >
-      <SelectTrigger id="popup-select-trigger" className="w-32">
-        <SelectValue placeholder="Select" />
-      </SelectTrigger>
-      {tasks.filter((task: string) => addedTasks.includes(task) === false)
-        .length > 0 && (
-        <SelectContent position="popper">
-          {tasks
-            .filter((task: string) => addedTasks.includes(task) === false)
-            .map((task: string, i: number) => (
-              <SelectItem key={i} value={task}>
-                {task}
-              </SelectItem>
-            ))}
-        </SelectContent>
-      )}
-    </Select>
-  );
+interface taskType {
+  date: string;
+  title: string;
+  infos: string[];
 }
 
-export function SlotInput({ date }: { date: Date }) {
-  const [addedTasks, setAddedTasks] = useState<string[]>([]);
+// function DropdownMenuDemo({
+//   addedTask,
+//   setAddedTask,
+// }: {
+//   addedTask: taskType;
+//   setAddedTask: React.Dispatch<React.SetStateAction<taskType>>;
+// }) {
+//   const { tasks } = useContext(SlotsContext);
+//   const [selectVal, setSelectVal] = useState<number>(Date.now());
+//   return (
+//     <Select
+//       key={selectVal}
+//       onValueChange={(value) => {
+//         setSelectVal(Date.now());
+//         setAddedTask({ ...addedTask, infos: [...addedTask.infos, value] });
+//       }}
+//     >
+//       <SelectTrigger id="popup-select-trigger" className="w-32">
+//         <SelectValue placeholder="Select" />
+//       </SelectTrigger>
+//       {tasks.filter((task: string) => addedTask.infos.includes(task) === false)
+//         .length > 0 && (
+//         <SelectContent position="popper">
+//           {tasks
+//             .filter((task: string) => addedTask.infos.includes(task) === false)
+//             .map((task: string, i: number) => (
+//               <SelectItem key={i} value={task}>
+//                 {task}
+//               </SelectItem>
+//             ))}
+//         </SelectContent>
+//       )}
+//     </Select>
+//   );
+// }
 
+function dateInNumber(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return Number(`${year}${month}${day}`);
+}
+
+export function SlotInput({
+  date,
+  slot,
+  s,
+}: {
+  date: Date;
+  slot: number;
+  s: string;
+}) {
+  const [addedTask, setAddedTask] = useState<taskType>({} as taskType);
+  const [title, setTitle] = useState("");
+  const [inp, setInp] = useState("");
+  const [infos, setInfos] = useState<string[]>([]);
   //   const [desc, setDesc] = useState("");
+
+  useEffect(() => {
+    setAddedTask({
+      date: `${dateInNumber(date)}${slot}`,
+      title,
+      infos,
+    });
+  }, [infos, title, date, slot]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="h-full w-full" variant="ghost"></Button>
+        <Button className="h-full w-full" variant="ghost">
+          {dateInNumber(date)}
+          {slot}
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>
           <DialogDescription>
+            {s}
+            {" - "}
             {date.toLocaleDateString("en-GB")}
           </DialogDescription>
         </DialogHeader>
-        <DialogDescription className="flex gap-2">
-          {addedTasks.length > 0 ? (
-            addedTasks.map((task: string, i: number) => (
-              <span
-                className="flex items-center gap-2 border rounded-full py-2 pl-4 pr-2 text-xs justify-between"
-                key={i}
-              >
-                <span key={i}>{task}</span>
-                <button
-                  onClick={() =>
-                    setAddedTasks(addedTasks.filter((t) => t !== task))
-                  }
-                >
-                  <X className="h-4" />
-                </button>
-              </span>
-            ))
-          ) : (
-            <span>No tasks added</span>
-          )}
-        </DialogDescription>
+        <DialogDescription className="flex gap-2"></DialogDescription>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            {/* <Label htmlFor="name" className="text-right">
-              Task
+            <Label htmlFor="name" className="text-right">
+              Title
             </Label>
             <Input
               id="name"
-              defaultValue={text}
-              onChange={(e) => setText(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               className="col-span-3"
-            /> */}
-            <DropdownMenuDemo
-              addedTasks={addedTasks}
-              setAddedTasks={setAddedTasks}
             />
+            <div className="flex flex-colw-72">
+              {infos.map((task: string, i: number) => (
+                <span
+                  className="flex items-center gap-2 border rounded-full py-2 pl-4 pr-2 text-xs justify-between"
+                  key={i}
+                >
+                  <span key={i}>{task}</span>
+                  <button onClick={() => setInfos(removeIthElement(infos, i))}>
+                    <X className="h-4" />
+                  </button>
+                </span>
+              ))}
+
+              <div className="flex">
+                <Input
+                  id="inp"
+                  value={inp}
+                  onChange={(e) => setInp(e.target.value)}
+                  className="w-36 "
+                />
+                <Button
+                  onClick={() => {
+                    if (inp !== "") {
+                      setInfos([...infos, inp]);
+                      setInp("");
+                    }
+                  }}
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </div>
+            {/* <DropdownMenuDemo
+              addedTask={addedTask}
+              setAddedTask={setAddedTask}
+            /> */}
           </div>
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="default">
+            <Button
+              onClick={() => handleSlotPost(addedTask)}
+              type="button"
+              variant="default"
+            >
               Save
             </Button>
           </DialogClose>
@@ -123,4 +176,8 @@ export function SlotInput({ date }: { date: Date }) {
       </DialogContent>
     </Dialog>
   );
+}
+
+function handleSlotPost(addedTask: taskType) {
+  console.log(addedTask);
 }
