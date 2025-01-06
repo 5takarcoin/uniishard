@@ -6,6 +6,7 @@ export interface userType {
 }
 
 export interface tableStyleType {
+  _id?: string;
   name: string;
   start: number;
   end: number;
@@ -16,6 +17,12 @@ export interface tableStyleType {
 export interface tableType {
   _id: string;
   schema: tableStyleType;
+  title: string;
+  slots: slotType[];
+}
+
+export interface slotType {
+  date: string;
   title: string;
   infos: string[];
 }

@@ -23,7 +23,6 @@ export default function Calendar() {
     <div className="flex flex-col">
       {currTable.schema?.name ? (
         <div className="flex flex-col w-11/12 justify-center ">
-          <p>aha {currTable.schema.name}</p>
           <Slider
             className="py-20 w-1/2 mx-auto"
             defaultValue={[numOfDays]}
@@ -32,9 +31,8 @@ export default function Calendar() {
             step={1}
             onValueChange={(e) => setNumOfDays(e[0])}
           />
-          <h3 className="text-2xl">{currTable.schema.name}</h3>
+          {/* <h3 className="text-2xl">{currTable.schema.name}</h3> */}
           <CalendarContainer>
-            {currTable.schema.name}
             {currTable.schema && (
               <>
                 <Hours currTable={currTable.schema} />

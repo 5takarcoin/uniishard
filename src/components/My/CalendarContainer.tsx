@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { SlotsContext } from "@/context/slotscontext";
 import { SlotInput } from "./SlotInput";
-import { minFromMidnight, minutesToHHMM } from "@/utils/utils";
+import { dateInNumber, minFromMidnight, minutesToHHMM } from "@/utils/utils";
 import { tableStyleType } from "@/utils/types";
+import { UserContext } from "@/context/usercontext";
 
 export default function CalendarContainer({
   children,
@@ -42,6 +43,7 @@ function OneWeek() {
 
 function OneDay({ day }: { day: Date }) {
   const { slots, slotsNum } = useContext(SlotsContext);
+  console.log("aha");
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">

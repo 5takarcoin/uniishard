@@ -6,11 +6,12 @@ import { LoginCard } from "./components/My/LogIn";
 import { Button } from "./components/ui/button";
 import { UserContext } from "./context/usercontext";
 import { SignUpCard } from "./components/My/SignUp";
-import { tableType, userType } from "./utils/types";
+import { slotType, tableType, userType } from "./utils/types";
 
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
   const [slotsNum, setSlotsNum] = useState<number[]>([]);
+  const [slotsAha, setSlotsAha] = useState<slotType[]>([]);
   const [currTable, setCurrTable] = useState<tableType>({} as tableType);
   const [tasks, setTasks] = useState<string[]>(["CSE111", "CSE222"]);
 
@@ -27,6 +28,8 @@ function App() {
     setCurrTable,
     slotsNum,
     setSlotsNum,
+    slotsAha,
+    setSlotsAha,
   };
 
   // const [loggedIn, setLoggedIn] = useState(false);

@@ -17,18 +17,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ChevronLeft, Plus, RefreshCcw } from "lucide-react";
+import { ChevronLeft, Plus, RefreshCcw, X } from "lucide-react";
 import { TimePickerTime } from "@/components/ui/timepicker/time-test";
 import React, { useContext, useEffect, useState } from "react";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
 import axios from "axios";
-import { SlotsContext } from "@/context/slotscontext";
+// import { SlotsContext } from "@/context/slotscontext";
 import { UserContext } from "@/context/usercontext";
 import { CalCal } from "./Calendar";
 import { formatHHMM } from "@/utils/utils";
-import { tableStyleType, tableType, userType } from "@/utils/types";
+import { tableStyleType, userType } from "@/utils/types";
 
 const handleSetUserCurrTable = async (
   sU: React.Dispatch<React.SetStateAction<userType>>,
@@ -39,7 +39,7 @@ const handleSetUserCurrTable = async (
   const us = await axios.put(`${baseUrl}/user/${un}`, {
     currTable: tab,
   });
-
+  console.log(us.data);
   sU(us.data);
 };
 
@@ -53,6 +53,20 @@ const addSetTable = async (shape: tableStyleType, user: string) => {
   });
   console.log("muhhahaha" + tab.data);
   return tab.data;
+};
+
+const existingSetTable = async (shape: tableStyleType, user: string) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  // const got = await axios.get(`${baseUrl}/tableStyle/:${shape._id}`);
+  if (shape.name) {
+    const tab = await axios.post(`${baseUrl}/table`, {
+      slots: [],
+      owner: user,
+      schema: shape._id,
+    });
+    // console.log("muhhahaha" + got.data);
+    return tab.data;
+  }
 };
 
 const updateCurrTable = async (un: string, id: string) => {
@@ -69,7 +83,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   // const { currTable } = useContext(SlotsContext);
   //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
-  const { currTable, setCurrTable } = useContext(SlotsContext);
+  // const { currTable, setCurrTable } = useContext(SlotsContext);
   const { user, setUser } = useContext(UserContext);
 
   const [tables, setTables] = useState<tableStyleType[]>([]);
@@ -104,6 +118,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
         <DialogHeader>
           <DialogTitle className="text-center">Table Shape</DialogTitle>
         </DialogHeader>
+        <DialogDescription></DialogDescription>
         <div className="flex  w-ful overflow-x-auto">
           <div className="">
             {!existing ? (
@@ -135,6 +150,13 @@ export function CreateTable({ change = false }: { change?: boolean }) {
                   >
                     <RefreshCcw />
                   </Button>
+                  <Button
+                    onClick={() => setCurrentTable({} as tableStyleType)}
+                    className="text-md mt-1 px-3 rounded-full"
+                    variant={"ghost"}
+                  >
+                    <X />
+                  </Button>
                 </div>
                 <div className="">
                   <SelectExistingTable
@@ -150,9 +172,12 @@ export function CreateTable({ change = false }: { change?: boolean }) {
           <div className="w-[1px] bg-gray-500/30 mt-4 mx-4" />
           <div className="">
             {/* Cursor */}
-            {shape?.name ? (
-              <CalCal currTable={shape!} />
-            ) : (
+            {existing && currentTable?.name && (
+              <CalCal currTable={currentTable!} />
+            )}
+            {!existing && shape?.name && <CalCal currTable={shape!} />}
+            {((existing && !currentTable?.name) ||
+              (!existing && !shape?.name)) && (
               <div className="flex  items-center justify-center">
                 <DialogDescription className="text-center">
                   <span className="">
@@ -179,9 +204,13 @@ export function CreateTable({ change = false }: { change?: boolean }) {
                     );
                     // await updateCurrTable(user.username, shape.name);
                   } else {
-                    if (setCurrTable)
-                      setCurrTable({ ...currTable, schema: currentTable! });
                     await updateCurrTable(user.username, currentTable!.name);
+                    const tab = await existingSetTable(currentTable!, user._id);
+                    await handleSetUserCurrTable(
+                      setUser!,
+                      user.username,
+                      tab._id
+                    );
                   }
                 }}
                 type="button"
@@ -234,6 +263,7 @@ function SelectExistingTable({
         {tables.map((table: tableStyleType, i: number) => (
           <SelectItem key={i} value={table.name}>
             {table.name}
+            {table._id}
           </SelectItem>
         ))}
       </SelectContent>

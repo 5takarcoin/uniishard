@@ -18,16 +18,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Plus, X } from "lucide-react";
 
-import { removeIthElement } from "@/utils/utils";
-
-interface taskType {
-  date: string;
-  title: string;
-  infos: string[];
-}
+import { dateInNumber, removeIthElement } from "@/utils/utils";
+import { UserContext } from "@/context/usercontext";
+import { slotType, userType } from "@/utils/types";
+import axios from "axios";
 
 // function DropdownMenuDemo({
 //   addedTask,
@@ -65,13 +62,6 @@ interface taskType {
 //   );
 // }
 
-function dateInNumber(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return Number(`${year}${month}${day}`);
-}
-
 export function SlotInput({
   date,
   slot,
@@ -81,19 +71,27 @@ export function SlotInput({
   slot: number;
   s: string;
 }) {
-  const [addedTask, setAddedTask] = useState<taskType>({} as taskType);
+  const [addedTask, setAddedTask] = useState<slotType>({} as slotType);
   const [title, setTitle] = useState("");
   const [inp, setInp] = useState("");
   const [infos, setInfos] = useState<string[]>([]);
   //   const [desc, setDesc] = useState("");
+  const { user, setUser } = useContext(UserContext);
+
+  const dateStr = `${dateInNumber(date)}${slot}`;
+
+  // useEffect(() => {
+  //   const d = user.currTable?.slots.filter((slot) => slot.date === dateStr);
+  //   if (d) setAddedTask(d[0]);
+  // }, [dateStr, user.currTable?.slots]);
 
   useEffect(() => {
     setAddedTask({
-      date: `${dateInNumber(date)}${slot}`,
+      date: dateStr,
       title,
       infos,
     });
-  }, [infos, title, date, slot]);
+  }, [infos, title, dateStr]);
 
   return (
     <Dialog>
@@ -165,7 +163,7 @@ export function SlotInput({
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              onClick={() => handleSlotPost(addedTask)}
+              onClick={() => handleSlotPost(addedTask, user, setUser!)}
               type="button"
               variant="default"
             >
@@ -178,6 +176,14 @@ export function SlotInput({
   );
 }
 
-function handleSlotPost(addedTask: taskType) {
-  console.log(addedTask);
+async function handleSlotPost(
+  addedTask: slotType,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>
+) {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  await axios.put(`${baseUrl}/table/${user.currTable?._id}`, addedTask);
+  console.log(user);
+  const get = await axios.get(`${baseUrl}/user/${user.username}`);
+  setUser(get.data);
 }
