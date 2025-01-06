@@ -4,16 +4,9 @@ import { SlotsContext } from "./context/slotscontext";
 import Calendar from "./components/My/Calendar";
 import { LoginCard } from "./components/My/LogIn";
 import { Button } from "./components/ui/button";
-import { UserContext, userType } from "./context/usercontext";
+import { UserContext } from "./context/usercontext";
 import { SignUpCard } from "./components/My/SignUp";
-
-export interface tableType {
-  name: string;
-  start: number;
-  end: number;
-  duration: number;
-  interval: number;
-}
+import { tableType, userType } from "./utils/types";
 
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
@@ -38,7 +31,7 @@ function App() {
 
   // const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {
-    setCurrTable(user.currTable || ({} as tableType));
+    setCurrTable(user?.currTable || ({} as tableType));
   }, [user]);
 
   return (
@@ -48,6 +41,7 @@ function App() {
           {user.name && (
             <>
               <h1>Welcom {user.name}</h1>
+
               <Button onClick={() => setUser({} as userType)}>Logout</Button>
             </>
           )}

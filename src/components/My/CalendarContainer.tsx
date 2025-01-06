@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { SlotsContext } from "@/context/slotscontext";
 import { SlotInput } from "./SlotInput";
-import { tableType } from "@/App";
 import { minFromMidnight, minutesToHHMM } from "@/utils/utils";
+import { tableStyleType } from "@/utils/types";
 
 export default function CalendarContainer({
   children,
@@ -90,14 +90,16 @@ function strTimeFromMidnight12(mins: number) {
   return `${hours}:${minutes < 10 ? "0" : ""}${minutes} ${isPm ? "PM" : "AM"}`;
 }
 
-function Hours({ currTable }: { currTable: tableType }) {
+function Hours({ currTable }: { currTable: tableStyleType }) {
   const { slots, setSlots, setSlotsNum } = useContext(SlotsContext);
   const { start, end, interval, duration } = currTable!;
 
   useEffect(() => {
     const startInMin = minFromMidnight(start);
     const endInMin = minFromMidnight(end);
-    const numberOfSlots = (endInMin - startInMin) / (interval + duration);
+    let t = interval + duration;
+    if (interval + duration === 0) t = 1;
+    const numberOfSlots = (endInMin - startInMin) / t;
     const tempSlots: string[] = [];
     const tempNumSlots: number[] = [];
     for (let i = 0; i < numberOfSlots; i++) {

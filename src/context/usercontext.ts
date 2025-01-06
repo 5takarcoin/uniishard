@@ -1,18 +1,11 @@
-import { tableType } from "@/App";
+import { tableStyleType, userType } from "@/utils/types";
 import { createContext } from "react";
 
 export const UserContext = createContext<{
   user: userType;
   setUser?: React.Dispatch<React.SetStateAction<userType>>;
-  tables?: tableType[];
+  tables?: tableStyleType[];
 }>({
   user: {} as userType,
   tables: [],
 });
-
-export interface userType {
-  name: string;
-  username: string;
-  tables: tableType[];
-  currTable: tableType | null;
-}

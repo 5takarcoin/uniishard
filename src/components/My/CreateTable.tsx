@@ -20,7 +20,6 @@ import {
 import { ChevronLeft, Plus, RefreshCcw } from "lucide-react";
 import { TimePickerTime } from "@/components/ui/timepicker/time-test";
 import React, { useContext, useEffect, useState } from "react";
-import { tableType } from "@/App";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
@@ -29,11 +28,31 @@ import { SlotsContext } from "@/context/slotscontext";
 import { UserContext } from "@/context/usercontext";
 import { CalCal } from "./Calendar";
 import { formatHHMM } from "@/utils/utils";
+import { tableStyleType, tableType, userType } from "@/utils/types";
 
-const addSetTable = async (shape: tableType) => {
+const handleSetUserCurrTable = async (
+  sU: React.Dispatch<React.SetStateAction<userType>>,
+  un: string,
+  tab: string
+) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const us = await axios.put(`${baseUrl}/user/${un}`, {
+    currTable: tab,
+  });
+
+  sU(us.data);
+};
+
+const addSetTable = async (shape: tableStyleType, user: string) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const got = await axios.post(`${baseUrl}/tableStyle`, shape);
-  return got.data;
+  const tab = await axios.post(`${baseUrl}/table`, {
+    slots: [],
+    owner: user,
+    schema: got.data._id,
+  });
+  console.log("muhhahaha" + tab.data);
+  return tab.data;
 };
 
 const updateCurrTable = async (un: string, id: string) => {
@@ -49,13 +68,13 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
   // const { currTable } = useContext(SlotsContext);
   //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
-  const [currentTable, setCurrentTable] = useState<tableType | null>(null);
-  const { setCurrTable } = useContext(SlotsContext);
-  const { user } = useContext(UserContext);
+  const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
+  const { currTable, setCurrTable } = useContext(SlotsContext);
+  const { user, setUser } = useContext(UserContext);
 
-  const [tables, setTables] = useState<tableType[]>([]);
+  const [tables, setTables] = useState<tableStyleType[]>([]);
 
-  const [shape, setShape] = useState<tableType>({} as tableType);
+  const [shape, setShape] = useState<tableStyleType>({} as tableStyleType);
 
   const getData = async () => {
     try {
@@ -75,7 +94,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="p-8" variant="outline">
-          {change ? "Create" : "Change"} Table <Plus />
+          {!change ? "Create" : "Change"} Table <Plus />
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -152,11 +171,16 @@ export function CreateTable({ change = false }: { change?: boolean }) {
               <Button
                 onClick={async () => {
                   if (!existing) {
-                    await addSetTable(shape);
-                    if (setCurrTable) setCurrTable(shape);
-                    await updateCurrTable(user.username, shape.name);
+                    const tab = await addSetTable(shape, user._id);
+                    await handleSetUserCurrTable(
+                      setUser!,
+                      user.username,
+                      tab._id
+                    );
+                    // await updateCurrTable(user.username, shape.name);
                   } else {
-                    if (setCurrTable) setCurrTable(currentTable!);
+                    if (setCurrTable)
+                      setCurrTable({ ...currTable, schema: currentTable! });
                     await updateCurrTable(user.username, currentTable!.name);
                   }
                 }}
@@ -190,9 +214,9 @@ function SelectExistingTable({
   setCurrentTable,
   tables,
 }: {
-  currentTable: tableType | null;
-  setCurrentTable: React.Dispatch<React.SetStateAction<tableType | null>>;
-  tables: tableType[];
+  currentTable: tableStyleType | null;
+  setCurrentTable: React.Dispatch<React.SetStateAction<tableStyleType | null>>;
+  tables: tableStyleType[];
 }) {
   return (
     <Select
@@ -207,7 +231,7 @@ function SelectExistingTable({
       </SelectTrigger>
 
       <SelectContent position="popper">
-        {tables.map((table: tableType, i: number) => (
+        {tables.map((table: tableStyleType, i: number) => (
           <SelectItem key={i} value={table.name}>
             {table.name}
           </SelectItem>
@@ -220,7 +244,7 @@ function SelectExistingTable({
 function NewSchema({
   setShape,
 }: {
-  setShape: React.Dispatch<React.SetStateAction<tableType>>;
+  setShape: React.Dispatch<React.SetStateAction<tableStyleType>>;
 }) {
   const [inputName, setInputName] = useState("");
   const [selectedStartTime, setSelectedStartTime] = useState<Date | undefined>(

@@ -6,8 +6,8 @@ import { Slider } from "@/components/ui/slider";
 // import { Plus } from "lucide-react";
 import { CreateTable } from "./CreateTable";
 // import { SlotsContext } from "@/context/slotscontext";
-import { tableType } from "@/App";
 import { SlotsContext } from "@/context/slotscontext";
+import { tableStyleType } from "@/utils/types";
 
 export default function Calendar() {
   // const [numOfWeeks, setNumOfWeeks] = useState<number>(1);
@@ -21,8 +21,9 @@ export default function Calendar() {
 
   return (
     <div className="flex flex-col">
-      {currTable ? (
+      {currTable.schema?.name ? (
         <div className="flex flex-col w-11/12 justify-center ">
+          <p>aha {currTable.schema.name}</p>
           <Slider
             className="py-20 w-1/2 mx-auto"
             defaultValue={[numOfDays]}
@@ -31,11 +32,12 @@ export default function Calendar() {
             step={1}
             onValueChange={(e) => setNumOfDays(e[0])}
           />
-          <h3 className="text-2xl">{currTable.name}</h3>
+          <h3 className="text-2xl">{currTable.schema.name}</h3>
           <CalendarContainer>
-            {currTable && (
+            {currTable.schema.name}
+            {currTable.schema && (
               <>
-                <Hours currTable={currTable} />
+                <Hours currTable={currTable.schema} />
                 <div className="flex items-start justify-between gap-2">
                   {Array.from({ length: numOfDays }).map((_, i) => (
                     // <OneWeek key={i} />
@@ -54,12 +56,12 @@ export default function Calendar() {
           <CreateTable />
         </div>
       )}
-      <CreateTable />
+      {currTable.schema?.name && <CreateTable change />}
     </div>
   );
 }
 
-export function CalCal({ currTable }: { currTable: tableType }) {
+export function CalCal({ currTable }: { currTable: tableStyleType }) {
   // const [numOfWeeks, setNumOfWeeks] = useState<number>(1);
   // const { currTable } = useContext(SlotsContext);
 
@@ -71,7 +73,7 @@ export function CalCal({ currTable }: { currTable: tableType }) {
 
   return (
     <div className="flex flex-col">
-      {currTable?.name && (
+      {currTable && (
         <div className="flex flex-col w-[600px] justify-center ">
           <CalendarContainer>
             <>

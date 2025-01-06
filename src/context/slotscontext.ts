@@ -1,5 +1,5 @@
+import { tableType } from "@/utils/types";
 import { createContext } from "react";
-import { tableType } from "@/App";
 
 export const SlotsContext = createContext<{
   slots: string[];
