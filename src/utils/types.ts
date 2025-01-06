@@ -26,3 +26,10 @@ export interface slotType {
   title: string;
   infos: string[];
 }
+
+export interface Dictionary {
+  [key: string]: {
+    title: string;
+    infos: string[];
+  };
+}

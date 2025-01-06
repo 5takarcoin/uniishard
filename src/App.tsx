@@ -6,12 +6,12 @@ import { LoginCard } from "./components/My/LogIn";
 import { Button } from "./components/ui/button";
 import { UserContext } from "./context/usercontext";
 import { SignUpCard } from "./components/My/SignUp";
-import { slotType, tableType, userType } from "./utils/types";
+import { Dictionary, tableType, userType } from "./utils/types";
 
 function App() {
   const [slots, setSlots] = useState<string[]>([]);
   const [slotsNum, setSlotsNum] = useState<number[]>([]);
-  const [slotsAha, setSlotsAha] = useState<slotType[]>([]);
+  const [slotsAha, setSlotsAha] = useState<Dictionary>({});
   const [currTable, setCurrTable] = useState<tableType>({} as tableType);
   const [tasks, setTasks] = useState<string[]>(["CSE111", "CSE222"]);
 
@@ -33,9 +33,19 @@ function App() {
   };
 
   // const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(() => {
-    setCurrTable(user?.currTable || ({} as tableType));
-  }, [user]);
+  // useEffect(() => {
+  //   setCurrTable(user?.currTable || ({} as tableType));
+  //   const ss = user.currTable?.slots;
+  //   const dic: Dictionary = {};
+  //   if (ss) {
+  //     const l = ss.length;
+  //     for (let i = 0; i < l; i++) {
+  //       dic[ss[i].date] = { title: ss[i].title, infos: ss[i].infos };
+  //     }
+  //   }
+  //   console.log(dic);
+  //   setSlotsAha(dic);
+  // }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

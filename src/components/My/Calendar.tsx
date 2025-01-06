@@ -19,6 +19,8 @@ export default function Calendar() {
     return today;
   }
 
+  console.log("bal");
+
   return (
     <div className="flex flex-col">
       {currTable.schema?.name ? (

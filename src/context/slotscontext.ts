@@ -1,4 +1,4 @@
-import { slotType, tableType } from "@/utils/types";
+import { Dictionary, tableType } from "@/utils/types";
 import { createContext } from "react";
 
 export const SlotsContext = createContext<{
@@ -6,8 +6,8 @@ export const SlotsContext = createContext<{
   setSlots?: React.Dispatch<React.SetStateAction<string[]>>;
   slotsNum: number[];
   setSlotsNum?: React.Dispatch<React.SetStateAction<number[]>>;
-  slotsAha: slotType[];
-  setSlotsAha?: React.Dispatch<React.SetStateAction<slotType[]>>;
+  slotsAha: Dictionary;
+  setSlotsAha?: React.Dispatch<React.SetStateAction<Dictionary>>;
   tasks: string[];
   setTasks?: React.Dispatch<React.SetStateAction<string[]>>;
   currTable: tableType;
@@ -17,7 +17,7 @@ export const SlotsContext = createContext<{
   slotsNum: [],
   tasks: [],
   currTable: {} as tableType,
-  slotsAha: [],
+  slotsAha: {},
 });
 
 export const CurrTableContext = createContext<tableType>({} as tableType);
