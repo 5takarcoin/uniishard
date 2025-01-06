@@ -30,3 +30,19 @@ export function dateInNumber(date: Date) {
   const day = String(date.getDate()).padStart(2, "0");
   return Number(`${year}${month}${day}`);
 }
+
+export function strTimeFromMidnight12(mins: number) {
+  let hours = Math.floor(mins / 60);
+  const minutes = mins % 60;
+  const isPm = Math.floor(hours / 12) > 0;
+  if (isPm) hours -= 12;
+  if (hours === 0) hours = 12;
+  return `${hours}:${minutes < 10 ? "0" : ""}${minutes} ${isPm ? "PM" : "AM"}`;
+}
+
+export function formatTimeInMinutes(date: Date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return hours * 60 + minutes;
+}

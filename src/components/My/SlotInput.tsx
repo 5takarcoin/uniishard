@@ -1,11 +1,4 @@
 import { Button } from "@/components/ui/button";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
 import {
   Dialog,
   DialogClose,
@@ -25,42 +18,6 @@ import { dateInNumber, removeIthElement } from "@/utils/utils";
 import { UserContext } from "@/context/usercontext";
 import { slotType, userType } from "@/utils/types";
 import axios from "axios";
-
-// function DropdownMenuDemo({
-//   addedTask,
-//   setAddedTask,
-// }: {
-//   addedTask: taskType;
-//   setAddedTask: React.Dispatch<React.SetStateAction<taskType>>;
-// }) {
-//   const { tasks } = useContext(SlotsContext);
-//   const [selectVal, setSelectVal] = useState<number>(Date.now());
-//   return (
-//     <Select
-//       key={selectVal}
-//       onValueChange={(value) => {
-//         setSelectVal(Date.now());
-//         setAddedTask({ ...addedTask, infos: [...addedTask.infos, value] });
-//       }}
-//     >
-//       <SelectTrigger id="popup-select-trigger" className="w-32">
-//         <SelectValue placeholder="Select" />
-//       </SelectTrigger>
-//       {tasks.filter((task: string) => addedTask.infos.includes(task) === false)
-//         .length > 0 && (
-//         <SelectContent position="popper">
-//           {tasks
-//             .filter((task: string) => addedTask.infos.includes(task) === false)
-//             .map((task: string, i: number) => (
-//               <SelectItem key={i} value={task}>
-//                 {task}
-//               </SelectItem>
-//             ))}
-//         </SelectContent>
-//       )}
-//     </Select>
-//   );
-// }
 
 export function SlotInput({
   date,

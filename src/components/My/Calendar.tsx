@@ -1,16 +1,12 @@
-// import { Calendar as ShadCal } from "@/components/ui/calendar";
 import { useContext, useState } from "react";
-import CalendarContainer, { Hours, OneDay } from "./CalendarContainer";
+import CalendarContainer from "./CalendarContainer";
 import { Slider } from "@/components/ui/slider";
-// import { Button } from "../ui/button";
-// import { Plus } from "lucide-react";
 import { CreateTable } from "./CreateTable";
-// import { SlotsContext } from "@/context/slotscontext";
 import { SlotsContext } from "@/context/slotscontext";
-import { tableStyleType } from "@/utils/types";
+import OneDay from "./OneDay";
+import Hours from "./Hours";
 
 export default function Calendar() {
-  // const [numOfWeeks, setNumOfWeeks] = useState<number>(1);
   const [numOfDays, setNumOfDays] = useState<number>(6);
   const { currTable } = useContext(SlotsContext);
   function calcSlotDay(i: number) {
@@ -55,37 +51,6 @@ export default function Calendar() {
         </div>
       )}
       {currTable.schema?.name && <CreateTable change />}
-    </div>
-  );
-}
-
-export function CalCal({ currTable }: { currTable: tableStyleType }) {
-  // const [numOfWeeks, setNumOfWeeks] = useState<number>(1);
-  // const { currTable } = useContext(SlotsContext);
-
-  function calcSlotDay(i: number) {
-    const today = new Date();
-    today.setDate(today.getDate() + i);
-    return today;
-  }
-
-  return (
-    <div className="flex flex-col">
-      {currTable && (
-        <div className="flex flex-col w-[600px] justify-center ">
-          <CalendarContainer>
-            <>
-              <Hours currTable={currTable} />
-              <div className="flex items-start justify-between gap-2">
-                {Array.from({ length: 7 }).map((_, i) => (
-                  // <OneWeek key={i} />
-                  <OneDay key={i} day={calcSlotDay(i)} />
-                ))}
-              </div>
-            </>
-          </CalendarContainer>
-        </div>
-      )}
     </div>
   );
 }
