@@ -4,7 +4,6 @@ import { SlotsContext } from "@/context/slotscontext";
 
 export default function OneDay({ day }: { day: Date }) {
   const { slots, slotsNum } = useContext(SlotsContext);
-  console.log("aha");
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">
