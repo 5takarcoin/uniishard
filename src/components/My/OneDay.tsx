@@ -1,9 +1,6 @@
-import { SlotInput } from "./SlotInput";
-import { useContext } from "react";
-import { SlotsContext } from "@/context/slotscontext";
+// import { SlotInput } from "./SlotInput";
 
 export default function OneDay({ day }: { day: Date }) {
-  const { slots, slotsNum } = useContext(SlotsContext);
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">
@@ -24,14 +21,14 @@ export default function OneDay({ day }: { day: Date }) {
             }
           </span>
         </div>
-        {slotsNum.map((slot: number, i: number) => (
+        {/* {slotsNum.map((slot: number, i: number) => (
           <div
             key={i}
             className="hover:bg-gray-800 w-32 rounded-md h-12 border flex items-center justify-center"
           >
             <SlotInput date={day} slot={slot} s={slots[i]} />
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );

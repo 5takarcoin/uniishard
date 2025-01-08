@@ -1,19 +1,20 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import CalendarContainer from "./CalendarContainer";
 import { Slider } from "@/components/ui/slider";
 import { CreateTable } from "./CreateTable";
-import { SlotsContext } from "@/context/slotscontext";
 import OneDay from "./OneDay";
 import Hours from "./Hours";
+import { tableType } from "@/utils/types";
 
 export default function Calendar() {
   const [numOfDays, setNumOfDays] = useState<number>(6);
-  const { currTable } = useContext(SlotsContext);
   function calcSlotDay(i: number) {
     const today = new Date();
     today.setDate(today.getDate() + i);
     return today;
   }
+
+  const currTable = {} as tableType;
 
   return (
     <div className="flex flex-col">

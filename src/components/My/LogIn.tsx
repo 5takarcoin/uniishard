@@ -7,9 +7,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useContext, useState } from "react";
-import axios from "axios";
-import { UserContext } from "@/context/usercontext";
+import { useLoginMutation } from "@/store/services/myApi";
+import { useDispatch } from "react-redux";
+import { setCreds } from "@/store/userSlice";
+import { useState } from "react";
 
 export function LoginCard({
   sw,
@@ -19,17 +20,21 @@ export function LoginCard({
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { setUser } = useContext(UserContext);
+  const [login] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const handleClick = async () => {
-    const baseUrl = import.meta.env.VITE_BASE_URL;
-    const got = await axios.post(`${baseUrl}/auth/login`, {
-      username,
-      password,
-    });
-    if (setUser) {
-      setUser(got.data);
-      console.log(got.data);
+    // const baseUrl = import.meta.env.VITE_BASE_URL;
+    // const got = await axios.post(`${baseUrl}/auth/login`, {
+    //   username,
+    //   password,
+    // });
+    try {
+      const response = await login({ username, password });
+
+      dispatch(setCreds(response.data));
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

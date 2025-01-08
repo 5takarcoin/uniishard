@@ -8,9 +8,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useContext, useState } from "react";
-import axios from "axios";
-import { UserContext } from "@/context/usercontext";
+import { useState } from "react";
+// import axios from "axios";
 
 export function SignUpCard({
   sw,
@@ -21,18 +20,13 @@ export function SignUpCard({
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { setUser } = useContext(UserContext);
-
   const handleClick = async () => {
-    const baseUrl = import.meta.env.VITE_BASE_URL;
-    const got = await axios.post(`${baseUrl}/auth/signup`, {
-      username,
-      password,
-      name,
-    });
-    if (setUser) {
-      setUser(got.data);
-    }
+    // const baseUrl = import.meta.env.VITE_BASE_URL;
+    // const got = await axios.post(`${baseUrl}/auth/signup`, {
+    //   username,
+    //   password,
+    //   name,
+    // });
   };
   return (
     <Card className="w-[350px]">

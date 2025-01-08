@@ -1,16 +1,21 @@
+import { userType } from "@/utils/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
   name: "user",
-  initialState: {},
+  initialState: {} as userType,
   reducers: {
     setCreds: (state, action) => {
+      console.log("____");
       console.log(state);
-      state = { ...action.payload };
+      console.log("____");
+      return action.payload;
     },
     logout: (state) => {
+      console.log("____");
       console.log(state);
-      state = {};
+      console.log("____");
+      state = {} as userType;
     },
   },
 });

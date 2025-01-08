@@ -1,6 +1,7 @@
 import CalendarContainer from "./CalendarContainer";
 import { tableStyleType } from "@/utils/types";
 import OneDay from "./OneDay";
+import Hours from "./Hours";
 
 export default function CalCal({ currTable }: { currTable: tableStyleType }) {
   function calcSlotDay(i: number) {

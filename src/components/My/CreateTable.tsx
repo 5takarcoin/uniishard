@@ -18,63 +18,62 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ChevronLeft, Plus, RefreshCcw, X } from "lucide-react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 // import { SlotsContext } from "@/context/slotscontext";
-import { UserContext } from "@/context/usercontext";
-import { tableStyleType, userType } from "@/utils/types";
+import { tableStyleType } from "@/utils/types";
 import CalCal from "./CalCal";
 import NewSchema from "./NewSchema";
 
-const handleSetUserCurrTable = async (
-  sU: React.Dispatch<React.SetStateAction<userType>>,
-  un: string,
-  tab: string
-) => {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const us = await axios.put(`${baseUrl}/user/${un}`, {
-    currTable: tab,
-  });
-  console.log(us.data);
-  sU(us.data);
-};
+// const handleSetUserCurrTable = async (
+//   sU: React.Dispatch<React.SetStateAction<userType>>,
+//   un: string,
+//   tab: string
+// ) => {
+//   const baseUrl = import.meta.env.VITE_BASE_URL;
+//   const us = await axios.put(`${baseUrl}/user/${un}`, {
+//     currTable: tab,
+//   });
+//   console.log(us.data);
+//   sU(us.data);
+// };
 
-const addSetTable = async (shape: tableStyleType, user: string) => {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const got = await axios.post(`${baseUrl}/tableStyle`, shape);
-  const tab = await axios.post(`${baseUrl}/table`, {
-    slots: [],
-    owner: user,
-    schema: got.data._id,
-  });
-  console.log("muhhahaha" + tab.data);
-  return tab.data;
-};
+// const addSetTable = async (shape: tableStyleType, user: string) => {
+//   const baseUrl = import.meta.env.VITE_BASE_URL;
+//   const got = await axios.post(`${baseUrl}/tableStyle`, shape);
+//   const tab = await axios.post(`${baseUrl}/table`, {
+//     slots: [],
+//     owner: user,
+//     schema: got.data._id,
+//   });
+//   console.log("muhhahaha" + tab.data);
+//   return tab.data;
+// };
 
-const existingSetTable = async (shape: tableStyleType, user: string) => {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  // const got = await axios.get(`${baseUrl}/tableStyle/:${shape._id}`);
-  if (shape.name) {
-    const tab = await axios.post(`${baseUrl}/table`, {
-      slots: [],
-      owner: user,
-      schema: shape._id,
-    });
-    // console.log("muhhahaha" + got.data);
-    return tab.data;
-  }
-};
+// const existingSetTable = async (shape: tableStyleType, user: string) => {
+//   const baseUrl = import.meta.env.VITE_BASE_URL;
+//   // const got = await axios.get(`${baseUrl}/tableStyle/:${shape._id}`);
+//   if (shape.name) {
+//     const tab = await axios.post(`${baseUrl}/table`, {
+//       slots: [],
+//       owner: user,
+//       schema: shape._id,
+//     });
+//     // console.log("muhhahaha" + got.data);
+//     return tab.data;
+//   }
+// };
 
-const updateCurrTable = async (un: string, id: string) => {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const tab = await axios.get(`${baseUrl}tableStyle/${id}`);
-  await axios.put(`${baseUrl}user/${un}`, {
-    currTable: tab.data._id,
-  });
-  return tab.data;
-};
+// const updateCurrTable = async (un: string, id: string) => {
+//   const baseUrl = import.meta.env.VITE_BASE_URL;
+//   const tab = await axios.get(`${baseUrl}tableStyle/${id}`);
+//   await axios.put(`${baseUrl}user/${un}`, {
+//     currTable: tab.data._id,
+//   });
+//   return tab.data;
+// };
 
 export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
@@ -82,7 +81,6 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
   // const { currTable, setCurrTable } = useContext(SlotsContext);
-  const { user, setUser } = useContext(UserContext);
 
   const [tables, setTables] = useState<tableStyleType[]>([]);
 
@@ -101,7 +99,6 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   useEffect(() => {
     getData();
   }, []);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -192,25 +189,25 @@ export function CreateTable({ change = false }: { change?: boolean }) {
           <div className="flex flex-row-reverse direction-reverse justify-between w-full">
             <DialogClose asChild>
               <Button
-                onClick={async () => {
-                  if (!existing) {
-                    const tab = await addSetTable(shape, user._id);
-                    await handleSetUserCurrTable(
-                      setUser!,
-                      user.username,
-                      tab._id
-                    );
-                    // await updateCurrTable(user.username, shape.name);
-                  } else {
-                    await updateCurrTable(user.username, currentTable!.name);
-                    const tab = await existingSetTable(currentTable!, user._id);
-                    await handleSetUserCurrTable(
-                      setUser!,
-                      user.username,
-                      tab._id
-                    );
-                  }
-                }}
+                // onClick={async () => {
+                //   if (!existing) {
+                //     const tab = await addSetTable(shape, user._id);
+                //     await handleSetUserCurrTable(
+                //       setUser!,
+                //       user.username,
+                //       tab._id
+                //     );
+                //     // await updateCurrTable(user.username, shape.name);
+                //   } else {
+                //     await updateCurrTable(user.username, currentTable!.name);
+                //     const tab = await existingSetTable(currentTable!, user._id);
+                //     await handleSetUserCurrTable(
+                //       setUser!,
+                //       user.username,
+                //       tab._id
+                //     );
+                //   }
+                // }}
                 type="button"
                 variant="default"
               >
