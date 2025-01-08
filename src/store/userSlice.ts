@@ -5,16 +5,10 @@ const userSlice = createSlice({
   name: "user",
   initialState: {} as userType,
   reducers: {
-    setCreds: (state, action) => {
-      console.log("____");
-      console.log(state);
-      console.log("____");
+    setCreds: (_, action) => {
       return action.payload;
     },
-    logout: (state) => {
-      console.log("____");
-      console.log(state);
-      console.log("____");
+    logout: () => {
       return {} as userType;
     },
   },

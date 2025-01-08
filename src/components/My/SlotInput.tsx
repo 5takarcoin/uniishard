@@ -11,11 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useContext, useEffect, useState } from "react";
+import {  useState } from "react";
 import { Plus, X } from "lucide-react";
 
 import { dateInNumber, removeIthElement } from "@/utils/utils";
-import { UserContext } from "@/context/usercontext";
 import { slotType, userType } from "@/utils/types";
 import axios from "axios";
 
@@ -28,27 +27,25 @@ export function SlotInput({
   slot: number;
   s: string;
 }) {
-  const [addedTask, setAddedTask] = useState<slotType>({} as slotType);
   const [title, setTitle] = useState("");
   const [inp, setInp] = useState("");
   const [infos, setInfos] = useState<string[]>([]);
   //   const [desc, setDesc] = useState("");
-  const { user, setUser } = useContext(UserContext);
 
-  const dateStr = `${dateInNumber(date)}${slot}`;
+  // const dateStr = `${dateInNumber(date)}${slot}`;
 
   // useEffect(() => {
   //   const d = user.currTable?.slots.filter((slot) => slot.date === dateStr);
   //   if (d) setAddedTask(d[0]);
   // }, [dateStr, user.currTable?.slots]);
 
-  useEffect(() => {
-    setAddedTask({
-      date: dateStr,
-      title,
-      infos,
-    });
-  }, [infos, title, dateStr]);
+  // useEffect(() => {
+  //   setAddedTask({
+  //     date: dateStr,
+  //     title,
+  //     infos,
+  //   });
+  // }, [infos, title, dateStr]);
 
   return (
     <Dialog>
@@ -120,7 +117,7 @@ export function SlotInput({
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              onClick={() => handleSlotPost(addedTask, user, setUser!)}
+              // onClick={() => handleSlotPost(addedTask, user, setUser!)}
               type="button"
               variant="default"
             >
