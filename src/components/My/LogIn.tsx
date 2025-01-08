@@ -24,11 +24,6 @@ export function LoginCard({
   const dispatch = useDispatch();
 
   const handleClick = async () => {
-    // const baseUrl = import.meta.env.VITE_BASE_URL;
-    // const got = await axios.post(`${baseUrl}/auth/login`, {
-    //   username,
-    //   password,
-    // });
     try {
       const response = await login({ username, password });
 

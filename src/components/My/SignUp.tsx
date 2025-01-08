@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useSignupMutation } from "@/store/services/myApi";
+import { setCreds } from "@/store/userSlice";
 import { useState } from "react";
-// import axios from "axios";
+import { useDispatch } from "react-redux";
 
 export function SignUpCard({
   sw,
@@ -20,13 +22,18 @@ export function SignUpCard({
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [signup] = useSignupMutation();
+
+  const dispatch = useDispatch();
+
   const handleClick = async () => {
-    // const baseUrl = import.meta.env.VITE_BASE_URL;
-    // const got = await axios.post(`${baseUrl}/auth/signup`, {
-    //   username,
-    //   password,
-    //   name,
-    // });
+    try {
+      const response = await signup({ name, username, password });
+
+      dispatch(setCreds(response.data));
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Card className="w-[350px]">

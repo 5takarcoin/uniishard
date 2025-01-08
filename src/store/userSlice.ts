@@ -15,7 +15,7 @@ const userSlice = createSlice({
       console.log("____");
       console.log(state);
       console.log("____");
-      state = {} as userType;
+      return {} as userType;
     },
   },
 });

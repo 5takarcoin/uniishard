@@ -4,13 +4,17 @@ import { LoginCard } from "./components/My/LogIn";
 // import { Button } from "./components/ui/button";
 import { SignUpCard } from "./components/My/SignUp";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import { Button } from "./components/ui/button";
+import { logout } from "./store/userSlice";
 
 function App() {
   const [isloginpage, setIsloginpage] = useState(false);
 
   const user = useSelector((state: RootState) => state.auth);
+
+  const dispatch = useDispatch();
 
   return (
     <div className="bg-gray-900 h-screen ">
@@ -18,7 +22,7 @@ function App() {
         <>
           <h1>Welcom {user.name}</h1>
 
-          {/* <Button onClick={() => setUser({} as userType)}>Logout</Button> */}
+          <Button onClick={() => dispatch(logout())}>Logout</Button>
         </>
       )}
       {user.name ? (
