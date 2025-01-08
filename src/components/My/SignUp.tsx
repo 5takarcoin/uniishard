@@ -12,12 +12,9 @@ import { useSignupMutation } from "@/store/services/myApi";
 import { setCreds } from "@/store/userSlice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
-export function SignUpCard({
-  sw,
-}: {
-  sw: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export function SignUpCard() {
   const [username, setUsername] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -77,12 +74,8 @@ export function SignUpCard({
         </Button>
         <p className="pt-4 text-gray-400">
           Already have an account?
-          <Button
-            onClick={() => sw(true)}
-            className="-ml-2 text-gray-200"
-            variant={"link"}
-          >
-            Log in
+          <Button className="-ml-2 text-gray-200" variant={"link"}>
+            <Link to={"/login"}>Log in</Link>
           </Button>
         </p>
       </CardFooter>

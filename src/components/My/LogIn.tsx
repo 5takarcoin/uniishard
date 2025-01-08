@@ -11,12 +11,9 @@ import { useLoginMutation } from "@/store/services/myApi";
 import { useDispatch } from "react-redux";
 import { setCreds } from "@/store/userSlice";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-export function LoginCard({
-  sw,
-}: {
-  sw: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export function LoginCard() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -68,12 +65,8 @@ export function LoginCard({
         </Button>
         <p className="pt-4 text-gray-400">
           Don't have an account?
-          <Button
-            onClick={() => sw(false)}
-            className="-ml-2 text-gray-200"
-            variant={"link"}
-          >
-            Sign up
+          <Button className="-ml-2 text-gray-200" variant={"link"}>
+            <Link to={"/signup"}>Sign up</Link>
           </Button>
         </p>
       </CardFooter>
