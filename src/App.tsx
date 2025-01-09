@@ -11,7 +11,6 @@ import { Route, Routes } from "react-router-dom";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch();
 
   return (

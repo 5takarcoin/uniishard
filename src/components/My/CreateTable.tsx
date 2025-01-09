@@ -18,14 +18,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ChevronLeft, Plus, RefreshCcw, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 // import { SlotsContext } from "@/context/slotscontext";
 import { tableStyleType } from "@/utils/types";
 import CalCal from "./CalCal";
 import NewSchema from "./NewSchema";
+import { useAllStylesQuery } from "@/store/services/dataApi";
 
 // const handleSetUserCurrTable = async (
 //   sU: React.Dispatch<React.SetStateAction<userType>>,
@@ -77,28 +77,12 @@ import NewSchema from "./NewSchema";
 
 export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
-  // const { currTable } = useContext(SlotsContext);
-  //   const [existingTables, setExistingTables] = useState<tableType[]>([]);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
-  // const { currTable, setCurrTable } = useContext(SlotsContext);
-
-  const [tables, setTables] = useState<tableStyleType[]>([]);
 
   const [shape, setShape] = useState<tableStyleType>({} as tableStyleType);
 
-  const getData = async () => {
-    try {
-      const baseUrl = import.meta.env.VITE_BASE_URL;
-      const tables = await axios.get(`${baseUrl}/tableStyle`);
-      setTables(tables.data);
-      console.log(tables);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+  const { data: tables, refetch } = useAllStylesQuery(undefined);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -139,7 +123,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
                 <div className="flex items-center gap-2">
                   <Label className="text-md"> Select Existing</Label>
                   <Button
-                    onClick={getData}
+                    onClick={refetch}
                     className="text-md mt-1 px-3 rounded-full"
                     variant={"ghost"}
                   >

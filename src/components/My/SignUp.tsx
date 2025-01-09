@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSignupMutation } from "@/store/services/myApi";
+import { useSignupMutation } from "@/store/services/authApi";
 import { setCreds } from "@/store/userSlice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";

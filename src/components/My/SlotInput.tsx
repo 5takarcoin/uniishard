@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {  useState } from "react";
+import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
 import { dateInNumber, removeIthElement } from "@/utils/utils";
-import { slotType, userType } from "@/utils/types";
-import axios from "axios";
+import { useNewSlotMutation } from "@/store/services/dataApi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export function SlotInput({
   date,
@@ -32,8 +33,26 @@ export function SlotInput({
   const [infos, setInfos] = useState<string[]>([]);
   //   const [desc, setDesc] = useState("");
 
-  // const dateStr = `${dateInNumber(date)}${slot}`;
+  const dateStr = `${dateInNumber(date)}${slot}`;
 
+  const [newSlot] = useNewSlotMutation();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.auth);
+
+  const handleClick = async () => {
+    try {
+      const response = await newSlot({
+        body: { title, infos, dateStr },
+        id: user.currTable?._id,
+      });
+      console.log("meow");
+      console.log(response.data);
+      // dispatch(setCreds(response.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // useEffect(() => {
   //   const d = user.currTable?.slots.filter((slot) => slot.date === dateStr);
   //   if (d) setAddedTask(d[0]);
@@ -116,11 +135,7 @@ export function SlotInput({
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button
-              // onClick={() => handleSlotPost(addedTask, user, setUser!)}
-              type="button"
-              variant="default"
-            >
+            <Button onClick={handleClick} type="button" variant="default">
               Save
             </Button>
           </DialogClose>
@@ -130,14 +145,14 @@ export function SlotInput({
   );
 }
 
-async function handleSlotPost(
-  addedTask: slotType,
-  user: userType,
-  setUser: React.Dispatch<React.SetStateAction<userType>>
-) {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  await axios.put(`${baseUrl}/table/${user.currTable?._id}`, addedTask);
-  console.log(user);
-  const get = await axios.get(`${baseUrl}/user/${user.username}`);
-  setUser(get.data);
-}
+// async function handleSlotPost(
+//   addedTask: slotType, tableId: string, uNSM:
+// ) {
+//   const baseUrl = import.meta.env.VITE_BASE_URL;
+//   await axios.put(`${baseUrl}/table/${user.currTable?._id}`, addedTask);
+//   console.log(user);
+//   const get = await axios.get(`${baseUrl}/user/${user.username}`);
+//   setUser(get.data);
+
+//   uNSM({addedTask, tableId})
+// }

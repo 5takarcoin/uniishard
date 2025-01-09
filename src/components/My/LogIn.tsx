@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useLoginMutation } from "@/store/services/myApi";
+import { useLoginMutation } from "@/store/services/authApi";
 import { useDispatch } from "react-redux";
 import { setCreds } from "@/store/userSlice";
 import { useState } from "react";
