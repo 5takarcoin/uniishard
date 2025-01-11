@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/store/services/authApi";
-import { useDispatch } from "react-redux";
-import { setCreds } from "@/store/userSlice";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

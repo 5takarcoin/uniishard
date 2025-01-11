@@ -76,19 +76,19 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   const [newTable] = useNewTableMutation();
   const [upCT] = useUpdateCurrTableMutation();
 
-  const addSetTable = async (shape: tableStyleType, user: string) => {
+  const addSetTable = async (shape: tableStyleType) => {
     const got = await newStyle(shape);
-    const tab = await newTable({
-      slots: [],
-      owner: user,
-      schema: got.data._id,
-    });
-    console.log(tab.data);
-    return tab.data;
+    console.log(got.data);
+    return got.data;
   };
 
-  const updateCurrTable = async (un: string, id: string) => {
-    await upCT({ body: { currTable: id }, id: un });
+  const updateCurrTable = async (id: string) => {
+    const tab = await newTable({
+      slots: [],
+      owner: user.user._id,
+      schema: id,
+    });
+    await upCT({ body: { currTable: tab.data._id }, id: user.user.username });
     refetchUser();
   };
 
@@ -184,18 +184,11 @@ export function CreateTable({ change = false }: { change?: boolean }) {
               <Button
                 onClick={async () => {
                   if (!existing) {
-                    const tab = await addSetTable(shape, user.user._id);
-                    await updateCurrTable(user.user.username, tab._id);
+                    const tab = await addSetTable(shape);
+                    await updateCurrTable(tab._id);
+                  } else {
+                    await updateCurrTable(currentTable!._id!);
                   }
-                  // else {
-                  //   await updateCurrTable(user.username, currentTable!.name);
-                  //   const tab = await existingSetTable(currentTable!, user._id);
-                  //   // await handleSetUserCurrTable(
-                  //   //   setUser!,
-                  //   //   user.username,
-                  //   //   tab._id
-                  //   // );
-                  // }
                 }}
                 type="button"
                 variant="default"
