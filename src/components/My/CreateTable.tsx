@@ -18,7 +18,13 @@ import { Label } from "@/components/ui/label";
 import { tableStyleType } from "@/utils/types";
 import CalCal from "./CalCal";
 import NewSchema from "./NewSchema";
-import { useAllStylesQuery } from "@/store/services/dataApi";
+import {
+  useAllStylesQuery,
+  useNewStyleMutation,
+  useNewTableMutation,
+  useProfileQuery,
+  useUpdateCurrTableMutation,
+} from "@/store/services/dataApi";
 import SelectExistingTable from "./SelectExistingTable";
 
 // const handleSetUserCurrTable = async (
@@ -32,18 +38,6 @@ import SelectExistingTable from "./SelectExistingTable";
 //   });
 //   console.log(us.data);
 //   sU(us.data);
-// };
-
-// const addSetTable = async (shape: tableStyleType, user: string) => {
-//   const baseUrl = import.meta.env.VITE_BASE_URL;
-//   const got = await axios.post(`${baseUrl}/tableStyle`, shape);
-//   const tab = await axios.post(`${baseUrl}/table`, {
-//     slots: [],
-//     owner: user,
-//     schema: got.data._id,
-//   });
-//   console.log("muhhahaha" + tab.data);
-//   return tab.data;
 // };
 
 // const existingSetTable = async (shape: tableStyleType, user: string) => {
@@ -76,6 +70,27 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   const [shape, setShape] = useState<tableStyleType>({} as tableStyleType);
 
   const { data: tables, refetch } = useAllStylesQuery(undefined);
+  const { data: user, refetch: refetchUser } = useProfileQuery(undefined);
+
+  const [newStyle] = useNewStyleMutation();
+  const [newTable] = useNewTableMutation();
+  const [upCT] = useUpdateCurrTableMutation();
+
+  const addSetTable = async (shape: tableStyleType, user: string) => {
+    const got = await newStyle(shape);
+    const tab = await newTable({
+      slots: [],
+      owner: user,
+      schema: got.data._id,
+    });
+    console.log(tab.data);
+    return tab.data;
+  };
+
+  const updateCurrTable = async (un: string, id: string) => {
+    await upCT({ body: { currTable: id }, id: un });
+    refetchUser();
+  };
 
   return (
     <Dialog>
@@ -167,25 +182,21 @@ export function CreateTable({ change = false }: { change?: boolean }) {
           <div className="flex flex-row-reverse direction-reverse justify-between w-full">
             <DialogClose asChild>
               <Button
-                // onClick={async () => {
-                //   if (!existing) {
-                //     const tab = await addSetTable(shape, user._id);
-                //     await handleSetUserCurrTable(
-                //       setUser!,
-                //       user.username,
-                //       tab._id
-                //     );
-                //     // await updateCurrTable(user.username, shape.name);
-                //   } else {
-                //     await updateCurrTable(user.username, currentTable!.name);
-                //     const tab = await existingSetTable(currentTable!, user._id);
-                //     await handleSetUserCurrTable(
-                //       setUser!,
-                //       user.username,
-                //       tab._id
-                //     );
-                //   }
-                // }}
+                onClick={async () => {
+                  if (!existing) {
+                    const tab = await addSetTable(shape, user.user._id);
+                    await updateCurrTable(user.user.username, tab._id);
+                  }
+                  // else {
+                  //   await updateCurrTable(user.username, currentTable!.name);
+                  //   const tab = await existingSetTable(currentTable!, user._id);
+                  //   // await handleSetUserCurrTable(
+                  //   //   setUser!,
+                  //   //   user.username,
+                  //   //   tab._id
+                  //   // );
+                  // }
+                }}
                 type="button"
                 variant="default"
               >

@@ -4,7 +4,8 @@ import { Slider } from "@/components/ui/slider";
 import { CreateTable } from "./CreateTable";
 import OneDay from "./OneDay";
 import Hours from "./Hours";
-import { tableType } from "@/utils/types";
+// import { tableType } from "@/utils/types";
+import { useProfileQuery } from "@/store/services/dataApi";
 
 export default function Calendar() {
   const [numOfDays, setNumOfDays] = useState<number>(6);
@@ -14,10 +15,13 @@ export default function Calendar() {
     return today;
   }
 
-  const currTable = {} as tableType;
+  const { data } = useProfileQuery(undefined);
+
+  const currTable = data.user.currTable;
 
   return (
     <div className="flex flex-col">
+      <p>{currTable.schema?.name}</p>
       {currTable.schema?.name ? (
         <div className="flex flex-col w-11/12 justify-center ">
           <Slider

@@ -13,6 +13,13 @@ export const dataApi = createApi({
       }),
     }),
     profile: builder.query({ query: () => "/user/profile" }),
+    updateCurrTable: builder.mutation({
+      query: ({ body, id }) => ({
+        method: "PUT",
+        url: `/user/${id}`,
+        body,
+      }),
+    }),
     newSlot: builder.mutation({
       query: ({ body, id }) => ({
         method: "PUT",
@@ -20,8 +27,28 @@ export const dataApi = createApi({
         body,
       }),
     }),
+    newStyle: builder.mutation({
+      query: (body) => ({
+        method: "POST",
+        url: `/tableStyle`,
+        body,
+      }),
+    }),
+    newTable: builder.mutation({
+      query: (body) => ({
+        method: "POST",
+        url: `/table`,
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useAllStylesQuery, useNewSlotMutation, useProfileQuery } =
-  dataApi;
+export const {
+  useAllStylesQuery,
+  useNewSlotMutation,
+  useProfileQuery,
+  useNewStyleMutation,
+  useNewTableMutation,
+  useUpdateCurrTableMutation,
+} = dataApi;
