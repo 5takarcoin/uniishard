@@ -1,11 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import {
   Dialog,
@@ -18,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ChevronLeft, Plus, RefreshCcw, X } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 // import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { SlotsContext } from "@/context/slotscontext";
@@ -26,6 +19,7 @@ import { tableStyleType } from "@/utils/types";
 import CalCal from "./CalCal";
 import NewSchema from "./NewSchema";
 import { useAllStylesQuery } from "@/store/services/dataApi";
+import SelectExistingTable from "./SelectExistingTable";
 
 // const handleSetUserCurrTable = async (
 //   sU: React.Dispatch<React.SetStateAction<userType>>,
@@ -214,38 +208,5 @@ export function CreateTable({ change = false }: { change?: boolean }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function SelectExistingTable({
-  currentTable,
-  setCurrentTable,
-  tables,
-}: {
-  currentTable: tableStyleType | null;
-  setCurrentTable: React.Dispatch<React.SetStateAction<tableStyleType | null>>;
-  tables: tableStyleType[];
-}) {
-  return (
-    <Select
-      value={currentTable?.name || undefined}
-      onValueChange={(value) => {
-        const selectedTable = tables.find((table) => table.name === value);
-        setCurrentTable(selectedTable || null);
-      }}
-    >
-      <SelectTrigger id="popup-select-trigger" className="w-32">
-        <SelectValue placeholder="Select" />
-      </SelectTrigger>
-
-      <SelectContent position="popper">
-        {tables.map((table: tableStyleType, i: number) => (
-          <SelectItem key={i} value={table.name}>
-            {table.name}
-            {table._id}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
   );
 }

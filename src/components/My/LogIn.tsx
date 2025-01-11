@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -18,13 +19,14 @@ export function LoginCard() {
   const [password, setPassword] = useState<string>("");
 
   const [login] = useLoginMutation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleClick = async () => {
     try {
       const response = await login({ username, password });
-
-      dispatch(setCreds(response.data));
+      console.log(response.data);
+      // const user = await profile(response.data.token);
+      // dispatch(setCreds(user.data));
     } catch (error) {
       console.log(error);
     }
@@ -35,6 +37,7 @@ export function LoginCard() {
         <CardTitle className="text-center  text-xl">Log In</CardTitle>
       </CardHeader>
       <CardContent>
+        <CardDescription></CardDescription>
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-2">

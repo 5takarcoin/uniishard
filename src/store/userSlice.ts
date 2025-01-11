@@ -8,11 +8,8 @@ const userSlice = createSlice({
     setCreds: (_, action) => {
       return action.payload;
     },
-    logout: () => {
-      return {} as userType;
-    },
   },
 });
 
 export default userSlice.reducer;
-export const { setCreds, logout } = userSlice.actions;
+export const { setCreds } = userSlice.actions;
