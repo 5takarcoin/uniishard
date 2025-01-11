@@ -16,13 +16,11 @@ export default function Calendar() {
   }
 
   const { data } = useProfileQuery(undefined);
-
-  const currTable = data.user.currTable;
+  const currTable = data?.user.currTable;
 
   return (
     <div className="flex flex-col">
-      <p>{currTable.schema?.name}</p>
-      {currTable.schema?.name ? (
+      {currTable?.schema?.name ? (
         <div className="flex flex-col w-11/12 justify-center ">
           <Slider
             className="py-20 w-1/2 mx-auto"
@@ -36,7 +34,7 @@ export default function Calendar() {
           <CalendarContainer>
             {currTable.schema && (
               <>
-                <Hours currTable={currTable.schema} />
+                <Hours />
                 <div className="flex items-start justify-between gap-2">
                   {Array.from({ length: numOfDays }).map((_, i) => (
                     // <OneWeek key={i} />
@@ -55,7 +53,7 @@ export default function Calendar() {
           <CreateTable />
         </div>
       )}
-      {currTable.schema?.name && <CreateTable change />}
+      {currTable?.schema?.name && <CreateTable change />}
     </div>
   );
 }

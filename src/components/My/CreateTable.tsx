@@ -85,10 +85,10 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   const updateCurrTable = async (id: string) => {
     const tab = await newTable({
       slots: [],
-      owner: user.user._id,
+      owner: user?.user._id,
       schema: id,
     });
-    await upCT({ body: { currTable: tab.data._id }, id: user.user.username });
+    await upCT({ body: { currTable: tab.data._id }, id: user?.user.username });
     refetchUser();
   };
 

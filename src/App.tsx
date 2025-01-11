@@ -6,16 +6,17 @@ import { SignUpCard } from "./components/My/SignUp";
 // import { useDispatch } from "react-redux";
 import { Button } from "./components/ui/button";
 import { Route, Routes } from "react-router-dom";
-import { userType } from "./utils/types";
 import { useProfileQuery } from "./store/services/dataApi";
 import { useLogoutMutation } from "./store/services/authApi";
+import { reshapeSlots } from "./utils/utils";
 // import {  } from "./store/services/authApi";
 
 function App() {
-  const user = {} as userType;
   const { data } = useProfileQuery(undefined);
   console.log("u know u");
-  console.log(data);
+  const slots = data?.user?.currTable?.slots;
+  console.log(slots);
+  console.log(reshapeSlots(slots));
   // const dispatch = useDispatch();
 
   const [logout] = useLogoutMutation();
@@ -31,8 +32,6 @@ function App() {
       <h1></h1>
       {data?.user?.username && (
         <>
-          <h1>Welcom {user.name}</h1>
-
           <Button onClick={handleLogout}>Logout</Button>
         </>
       )}

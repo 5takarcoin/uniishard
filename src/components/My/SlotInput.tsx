@@ -14,64 +14,46 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
-import { dateInNumber, removeIthElement } from "@/utils/utils";
-import { useNewSlotMutation } from "@/store/services/dataApi";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { removeIthElement } from "@/utils/utils";
+import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
 
 export function SlotInput({
+  dateStr,
   date,
-  slot,
   s,
+  exist,
 }: {
-  date: Date;
-  slot: number;
+  dateStr: number;
   s: string;
+  date: Date;
+  exist?: { title: string; infos: string[] };
 }) {
-  const [title, setTitle] = useState("");
+  console.log("ho ache in " + dateStr);
+  console.log(exist);
+
+  const [title, setTitle] = useState(exist?.title || "");
   const [inp, setInp] = useState("");
-  const [infos, setInfos] = useState<string[]>([]);
-  //   const [desc, setDesc] = useState("");
-
-  const dateStr = `${dateInNumber(date)}${slot}`;
-
+  const [infos, setInfos] = useState<string[]>(exist?.infos || []);
   const [newSlot] = useNewSlotMutation();
-  const dispatch = useDispatch();
 
-  const user = useSelector((state: RootState) => state.auth);
+  const { data } = useProfileQuery(undefined);
 
   const handleClick = async () => {
     try {
-      const response = await newSlot({
-        body: { title, infos, dateStr },
-        id: user.currTable?._id,
+      await newSlot({
+        body: { title, infos, date: dateStr },
+        id: data?.user.currTable?._id,
       });
-      console.log("meow");
-      console.log(response.data);
-      // dispatch(setCreds(response.data));
     } catch (error) {
       console.log(error);
     }
   };
-  // useEffect(() => {
-  //   const d = user.currTable?.slots.filter((slot) => slot.date === dateStr);
-  //   if (d) setAddedTask(d[0]);
-  // }, [dateStr, user.currTable?.slots]);
-
-  // useEffect(() => {
-  //   setAddedTask({
-  //     date: dateStr,
-  //     title,
-  //     infos,
-  //   });
-  // }, [infos, title, dateStr]);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="h-full w-full" variant="ghost">
-          {dateInNumber(date)}
-          {slot}
+          {title}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[425px]">
@@ -127,10 +109,6 @@ export function SlotInput({
                 </Button>
               </div>
             </div>
-            {/* <DropdownMenuDemo
-              addedTask={addedTask}
-              setAddedTask={setAddedTask}
-            /> */}
           </div>
         </div>
         <DialogFooter>
@@ -144,15 +122,3 @@ export function SlotInput({
     </Dialog>
   );
 }
-
-// async function handleSlotPost(
-//   addedTask: slotType, tableId: string, uNSM:
-// ) {
-//   const baseUrl = import.meta.env.VITE_BASE_URL;
-//   await axios.put(`${baseUrl}/table/${user.currTable?._id}`, addedTask);
-//   console.log(user);
-//   const get = await axios.get(`${baseUrl}/user/${user.username}`);
-//   setUser(get.data);
-
-//   uNSM({addedTask, tableId})
-// }

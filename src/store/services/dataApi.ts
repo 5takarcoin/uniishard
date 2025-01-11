@@ -1,3 +1,4 @@
+import { userType } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const dataApi = createApi({
@@ -12,7 +13,9 @@ export const dataApi = createApi({
         url: "/tableStyle",
       }),
     }),
-    profile: builder.query({ query: () => "/user/profile" }),
+    profile: builder.query<{ user: userType }, void>({
+      query: () => "/user/profile",
+    }),
     updateCurrTable: builder.mutation({
       query: ({ body, id }) => ({
         method: "PUT",
