@@ -95,7 +95,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="p-8" variant="outline">
+        <Button className="p-8 w-48" variant="outline">
           {!change ? "Create" : "Change"} Table <Plus />
         </Button>
       </DialogTrigger>
@@ -107,7 +107,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
           <DialogTitle className="text-center">Table Shape</DialogTitle>
         </DialogHeader>
         <DialogDescription></DialogDescription>
-        <div className="flex  w-ful overflow-x-auto">
+        <div className="flex  w-full overflow-x-auto">
           <div className="">
             {!existing ? (
               <NewSchema setShape={setShape} />

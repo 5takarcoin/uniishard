@@ -101,3 +101,9 @@ export function dayFromToday(date1: Date) {
 
   return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 }
+
+export function calcSlotDay(i: number) {
+  const today = new Date();
+  today.setDate(today.getDate() + i);
+  return today;
+}

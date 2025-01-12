@@ -6,14 +6,10 @@ import OneDay from "./OneDay";
 import Hours from "./Hours";
 // import { tableType } from "@/utils/types";
 import { useProfileQuery } from "@/store/services/dataApi";
+import { calcSlotDay } from "@/utils/utils";
 
 export default function Calendar() {
   const [numOfDays, setNumOfDays] = useState<number>(6);
-  function calcSlotDay(i: number) {
-    const today = new Date();
-    today.setDate(today.getDate() + i);
-    return today;
-  }
 
   const { data } = useProfileQuery(undefined);
   const currTable = data?.user.currTable;
@@ -37,7 +33,6 @@ export default function Calendar() {
                 <Hours />
                 <div className="flex items-start justify-between gap-2">
                   {Array.from({ length: numOfDays }).map((_, i) => (
-                    // <OneWeek key={i} />
                     <OneDay key={i} day={calcSlotDay(i)} />
                   ))}
                 </div>
@@ -46,7 +41,7 @@ export default function Calendar() {
           </CalendarContainer>
         </div>
       ) : (
-        <div className="flex items-center justify-center w-full">
+        <div className="flex items-center justify-center">
           {/* <Button className="p-8" variant={"outline"}>
             Create Table <Plus />
           </Button> */}

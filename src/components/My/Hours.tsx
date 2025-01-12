@@ -2,9 +2,11 @@ import Slot from "./Slot";
 import { useSelector } from "react-redux";
 import { selectSlots } from "@/store/selectors/selector";
 
-export default function Hours() {
-  const { slots } = useSelector(selectSlots);
-
+export default function Hours({ demo }: { demo?: string[] }) {
+  const { slots: sls } = useSelector(selectSlots);
+  let slots = null;
+  if (demo) slots = demo;
+  else slots = sls;
   return (
     <div className="flex flex-col items-center justify-between gap-2">
       {/* Times */}
