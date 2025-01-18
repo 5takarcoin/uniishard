@@ -23,7 +23,8 @@ function App() {
   // const [triggerLogout, { isFetching, isError, isSuccess }] = useLazyLogoutQuery();
   // if (user.name) dispatch(setCreds(user));
 
-  const handleLogout = async () => {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     await logout(undefined);
   };
 

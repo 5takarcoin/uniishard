@@ -32,7 +32,12 @@ export const authApi = createApi({
         body: creds,
       }),
     }),
-    logout: builder.mutation({ query: () => "/logout" }),
+    logout: builder.mutation({
+      query: () => ({
+        method: "POST",
+        url: "/logout",
+      }),
+    }),
   }),
 });
 
