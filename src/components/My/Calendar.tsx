@@ -9,23 +9,15 @@ import { useProfileQuery } from "@/store/services/dataApi";
 import { calcSlotDay } from "@/utils/utils";
 
 export default function Calendar() {
-  const [numOfDays, setNumOfDays] = useState<number>(6);
+  const [numOfDays, setNumOfDays] = useState<number>(8);
 
   const { data } = useProfileQuery(undefined);
   const currTable = data?.user.currTable;
 
   return (
-    <div className="flex flex-col">
+    <div className="">
       {currTable?.schema?.name ? (
-        <div className="flex flex-col w-11/12 justify-center ">
-          <Slider
-            className="py-20 w-1/2 mx-auto"
-            defaultValue={[numOfDays]}
-            min={6}
-            max={40}
-            step={1}
-            onValueChange={(e) => setNumOfDays(e[0])}
-          />
+        <div className="flex flex-col justify-center">
           {/* <h3 className="text-2xl">{currTable.schema.name}</h3> */}
           <CalendarContainer>
             {currTable.schema && (
@@ -39,6 +31,14 @@ export default function Calendar() {
               </>
             )}
           </CalendarContainer>
+          <Slider
+            className="py-4 mx-auto"
+            defaultValue={[numOfDays]}
+            min={6}
+            max={40}
+            step={1}
+            onValueChange={(e) => setNumOfDays(e[0])}
+          />
         </div>
       ) : (
         <div className="flex items-center justify-center">

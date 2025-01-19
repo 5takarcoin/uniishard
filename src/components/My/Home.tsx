@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
+import { Button } from "../ui/button";
+
 export default function Home() {
   return (
-    <div className="h-screen px-24">
-      {/* <LoginCard /> */}
-      {/* <Calendar /> */}
+    <div className="h-screen px-24 w-full">
       <nav className="h-16 items-center flex justify-between">
         <span>Fake</span>
         <span>Nav Home About Logout</span>
@@ -16,6 +17,15 @@ export default function Home() {
           </h1>
           <p>Never forget your quizes</p>
           <p>Never forget your deadlines</p>
+          <div className="py-4 flex gap-4">
+            <Button variant={"destructive"}>
+              <Link to={"/login"}>Login</Link>
+            </Button>
+            <Button variant={"outline"}>
+              {" "}
+              <Link to={"/signup"}>Signup</Link>
+            </Button>
+          </div>
         </main>
         <section className="w-1/2 bg-gray-600"></section>
       </div>

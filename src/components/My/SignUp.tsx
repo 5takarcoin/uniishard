@@ -9,25 +9,29 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSignupMutation } from "@/store/services/authApi";
-import { setCreds } from "@/store/userSlice";
+import { useProfileQuery } from "@/store/services/dataApi";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function SignUpCard() {
   const [username, setUsername] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const [signup] = useSignupMutation();
+  const [message, setMessage] = useState<string>("");
 
-  const dispatch = useDispatch();
+  const [signup] = useSignupMutation();
+  const navigate = useNavigate();
+  const { refetch } = useProfileQuery(undefined);
 
   const handleClick = async () => {
     try {
       const response = await signup({ name, username, password });
-
-      dispatch(setCreds(response.data));
+      setMessage(response.data.message);
+      if (response.data.message === "Signup Successful") {
+        refetch();
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -56,6 +60,7 @@ export function SignUpCard() {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
+            <p>{message}</p>
             <div className="flex flex-col space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input

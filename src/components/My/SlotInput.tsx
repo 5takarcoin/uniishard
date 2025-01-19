@@ -28,9 +28,6 @@ export function SlotInput({
   date: Date;
   exist?: { title: string; infos: string[] };
 }) {
-  console.log("ho ache in " + dateStr);
-  console.log(exist);
-
   const [title, setTitle] = useState(exist?.title || "");
   const [inp, setInp] = useState("");
   const [infos, setInfos] = useState<string[]>(exist?.infos || []);

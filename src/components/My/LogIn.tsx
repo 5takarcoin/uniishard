@@ -9,22 +9,31 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/store/services/authApi";
+import { useProfileQuery } from "@/store/services/dataApi";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function LoginCard() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [message, setMessage] = useState<string>("");
+
+  const navigate = useNavigate();
+
   const [login] = useLoginMutation();
-  // const dispatch = useDispatch();
+
+  const { refetch } = useProfileQuery(undefined);
 
   const handleClick = async () => {
     try {
+      setMessage("");
       const response = await login({ username, password });
-      console.log(response.data);
-      // const user = await profile(response.data.token);
-      // dispatch(setCreds(user.data));
+      setMessage(response.data.message);
+      if (response.data.message === "Login Successful") {
+        refetch();
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +66,15 @@ export function LoginCard() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            <p
+              className={
+                message === "Login Successful"
+                  ? "text-green-500"
+                  : "text-red-500"
+              }
+            >
+              {message}
+            </p>
           </div>
         </form>
       </CardContent>
