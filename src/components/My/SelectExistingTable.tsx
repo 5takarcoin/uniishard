@@ -33,7 +33,6 @@ export default function SelectExistingTable({
         {tables.map((table: tableStyleType, i: number) => (
           <SelectItem key={i} value={table.name}>
             {table.name}
-            {table._id}
           </SelectItem>
         ))}
       </SelectContent>

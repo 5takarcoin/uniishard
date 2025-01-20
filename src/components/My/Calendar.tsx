@@ -12,13 +12,13 @@ export default function Calendar() {
   const [numOfDays, setNumOfDays] = useState<number>(8);
 
   const { data } = useProfileQuery(undefined);
-  const currTable = data?.user.currTable;
+  console.log(data?.user.tables[0]);
+  const currTable = data?.user.tables[0];
 
   return (
     <div className="">
       {currTable?.schema?.name ? (
         <div className="flex flex-col justify-center">
-          {/* <h3 className="text-2xl">{currTable.schema.name}</h3> */}
           <CalendarContainer>
             {currTable.schema && (
               <>

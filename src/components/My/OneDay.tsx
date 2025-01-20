@@ -9,7 +9,7 @@ export default function OneDay({ day }: { day: Date }) {
   const { numSlots } = useSelector(selectSlots);
 
   const { data } = useProfileQuery(undefined);
-  const rawSlots = data?.user?.currTable?.slots;
+  const rawSlots = data?.user?.tables[0]?.slots;
   const slots = reshapeSlots(rawSlots);
 
   return (
@@ -48,7 +48,7 @@ export default function OneDay({ day }: { day: Date }) {
                     ? slots[Number(`${dateInNumber(day)}${slot}`)]
                     : undefined
                 }
-                s={"sss"}
+                s={""}
                 dateStr={Number(`${dateInNumber(day)}${slot}`)}
                 date={day}
               />

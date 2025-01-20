@@ -9,8 +9,8 @@ export default function CalCal({ currTable }: { currTable: tableStyleType }) {
   return (
     <div className="flex flex-col">
       {currTable && (
-        <div className="flex flex-col w-[600px] justify-center ">
-          <CalendarContainer>
+        <div className="flex flex-col h-[420px] w-[610px] ">
+          <CalendarContainer small>
             {currTable && (
               <>
                 <Hours demo={numSlots} />

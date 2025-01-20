@@ -2,7 +2,7 @@ export interface userType {
   _id: string;
   name: string;
   username: string;
-  currTable: tableType | null;
+  tables: tableType[];
 }
 
 export interface tableStyleType {

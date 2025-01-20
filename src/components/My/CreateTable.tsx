@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-
 import {
   Dialog,
   DialogClose,
@@ -12,9 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { ChevronLeft, Plus, RefreshCcw, X } from "lucide-react";
 import { useState } from "react";
-// import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { SlotsContext } from "@/context/slotscontext";
 import { tableStyleType } from "@/utils/types";
 import CalCal from "./CalCal";
 import NewSchema from "./NewSchema";
@@ -26,42 +23,6 @@ import {
   useUpdateCurrTableMutation,
 } from "@/store/services/dataApi";
 import SelectExistingTable from "./SelectExistingTable";
-
-// const handleSetUserCurrTable = async (
-//   sU: React.Dispatch<React.SetStateAction<userType>>,
-//   un: string,
-//   tab: string
-// ) => {
-//   const baseUrl = import.meta.env.VITE_BASE_URL;
-//   const us = await axios.put(`${baseUrl}/user/${un}`, {
-//     currTable: tab,
-//   });
-//   console.log(us.data);
-//   sU(us.data);
-// };
-
-// const existingSetTable = async (shape: tableStyleType, user: string) => {
-//   const baseUrl = import.meta.env.VITE_BASE_URL;
-//   // const got = await axios.get(`${baseUrl}/tableStyle/:${shape._id}`);
-//   if (shape.name) {
-//     const tab = await axios.post(`${baseUrl}/table`, {
-//       slots: [],
-//       owner: user,
-//       schema: shape._id,
-//     });
-//     // console.log("muhhahaha" + got.data);
-//     return tab.data;
-//   }
-// };
-
-// const updateCurrTable = async (un: string, id: string) => {
-//   const baseUrl = import.meta.env.VITE_BASE_URL;
-//   const tab = await axios.get(`${baseUrl}tableStyle/${id}`);
-//   await axios.put(`${baseUrl}user/${un}`, {
-//     currTable: tab.data._id,
-//   });
-//   return tab.data;
-// };
 
 export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
@@ -101,13 +62,13 @@ export function CreateTable({ change = false }: { change?: boolean }) {
       </DialogTrigger>
       <DialogContent
         //  className="w-[425px]"
-        className="w-[900px] max-w-none h-[500px]"
+        className="w-[900px] max-w-none h-[600px]"
       >
         <DialogHeader>
           <DialogTitle className="text-center">Table Shape</DialogTitle>
         </DialogHeader>
         <DialogDescription></DialogDescription>
-        <div className="flex  w-full overflow-x-auto">
+        <div className="flex w-full h-[450px]">
           <div className="">
             {!existing ? (
               <NewSchema setShape={setShape} />
@@ -126,11 +87,11 @@ export function CreateTable({ change = false }: { change?: boolean }) {
               <>
                 <div className="h-[1rem] flex items-center justify-between">
                   <div className="h-[1px] bg-gray-500/50 flex-1"></div>
-                  <Label className="h-[1rem px-2">Or</Label>
+                  <Label className="h-[1rem] px-2">Or</Label>
                   <div className="h-[1px] bg-gray-500/50 flex-1"></div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Label className="text-md"> Select Existing</Label>
+                <div className="flex items-center gap-2 mt-4">
+                  <Label className="text-md "> Select Existing</Label>
                   <Button
                     onClick={refetch}
                     className="text-md mt-1 px-3 rounded-full"
@@ -146,7 +107,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
                     <X />
                   </Button>
                 </div>
-                <div className="">
+                <div className="mt-2">
                   <SelectExistingTable
                     currentTable={currentTable}
                     setCurrentTable={setCurrentTable}
@@ -157,8 +118,8 @@ export function CreateTable({ change = false }: { change?: boolean }) {
               </>
             )}
           </div>
-          <div className="w-[1px] bg-gray-500/30 mt-4 mx-4" />
-          <div className="">
+          <div className="w-[1px] bg-gray-500/30 mx-4 mb-2" />
+          <div className=" w-full ">
             {/* Cursor */}
             {existing && currentTable?.name && (
               <CalCal currTable={currentTable!} />
@@ -166,8 +127,8 @@ export function CreateTable({ change = false }: { change?: boolean }) {
             {!existing && shape?.name && <CalCal currTable={shape!} />}
             {((existing && !currentTable?.name) ||
               (!existing && !shape?.name)) && (
-              <div className="flex  items-center justify-center">
-                <DialogDescription className="text-center">
+              <div className="w-full h-full border flex items-center justify-center">
+                <DialogDescription className="text-center text-lg">
                   <span className="">
                     Select a Table <br />
                     or <br />

@@ -6,7 +6,7 @@ import { userType } from "@/utils/types";
 export const selectProfileSchema = (state: RootState) => {
   const query = state.dataApi.queries["profile(undefined)"];
   const data = query?.data as { user: userType } | undefined;
-  return data?.user?.currTable?.schema || null;
+  return data?.user?.tables[0]?.schema || null;
 };
 
 export const selectSlots = createSelector(selectProfileSchema, (schema) => {

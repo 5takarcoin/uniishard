@@ -13,7 +13,8 @@ import Navbar from "./components/My/Navbar";
 
 function App() {
   const { data, isFetching } = useProfileQuery(undefined);
-  const slots = data?.user?.currTable?.slots;
+  console.log(data);
+  const slots = data?.user?.tables[0]?.slots;
   console.log(slots);
   console.log(reshapeSlots(slots));
 
@@ -26,9 +27,11 @@ function App() {
             isFetching ? (
               <Hourglass />
             ) : data?.user?.username ? (
-              <div className="flex flex-col">
+              <div className="w-full flex flex-col min-h-screen">
                 <Navbar />
-                <Calendar />
+                <div className="flex flex-grow items-center justify-center">
+                  <Calendar />
+                </div>
               </div>
             ) : (
               <Home />
