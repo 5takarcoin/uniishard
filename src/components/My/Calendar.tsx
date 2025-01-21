@@ -22,7 +22,7 @@ export default function Calendar({ ind }: { ind: number }) {
       {currTable?.schema?.name ? (
         <div>
           <div className="flex justify-center">
-            <div className="p-2 border border-r-0">
+            <div className="p-2 border rounded-l-md border-r-0">
               <Hours demo={slots} />
             </div>
             <CalendarContainer>

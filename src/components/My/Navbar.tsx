@@ -14,11 +14,18 @@ export default function Navbar() {
     refetch();
   };
   return (
-    <div className="flex gap-8 h-24 items-center justify-end">
-      <p className="border-2 border-blue-500 p-4">{data?.user?.name}</p>
-      <Button className="" onClick={handleLogout}>
-        {isLoading ? <Hourglass /> : "Log out"}
-      </Button>
+    <div className="flex gap-8 h-24 items-center justify-between px-8 bg-background border-b">
+      <div>
+        <h1 className="text-3xl font-bold tracking-widest">Meow</h1>
+      </div>
+      <div className="flex items-center gap-8">
+        <p className="border rounded-3xl px-8 h-12 flex items-center border-blue-500 p-4">
+          {data?.user?.name}
+        </p>
+        <Button className="" onClick={handleLogout}>
+          {isLoading ? <Hourglass /> : "Log out"}
+        </Button>
+      </div>
     </div>
   );
 }

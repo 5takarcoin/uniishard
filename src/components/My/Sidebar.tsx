@@ -33,7 +33,7 @@ export function AppSidebar({
   };
 
   return (
-    <Sidebar collapsible="none" className="border-none w-full p-4">
+    <Sidebar collapsible="none" className="border-r bg-background w-full p-4">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg pb-4">Tables</SidebarGroupLabel>
