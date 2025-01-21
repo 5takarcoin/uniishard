@@ -12,8 +12,6 @@ export default function CalCal({
   setWeeklies: React.Dispatch<React.SetStateAction<slotType[]>>;
 }) {
   const { slots, numSlots } = calculateSlots(currTable);
-  console.log("numslots");
-  console.log(numSlots);
   return (
     <div className="flex flex-col">
       {currTable && (

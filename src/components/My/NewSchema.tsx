@@ -55,7 +55,7 @@ export default function NewSchema({
           <Input
             value={inputName}
             onChange={(e) => setInputName(e.target.value)}
-            className="mt-1 w-2/3"
+            className="mt-1"
           ></Input>
           <div className="flex items-center gap-1 flex-row-reverse text-green-500">
             {/* <p className="text-xs">Name exists</p> <Check /> */}

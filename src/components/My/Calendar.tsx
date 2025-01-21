@@ -6,51 +6,58 @@ import OneDay from "./OneDay";
 import Hours from "./Hours";
 // import { tableType } from "@/utils/types";
 import { useProfileQuery } from "@/store/services/dataApi";
-import { calcSlotDay } from "@/utils/utils";
+import { calcSlotDay, calculateSlots } from "@/utils/utils";
 
-export default function Calendar() {
+export default function Calendar({ ind }: { ind: number }) {
   const [numOfDays, setNumOfDays] = useState<number>(8);
 
   const { data } = useProfileQuery(undefined);
-  console.log(data?.user.tables[0]);
-  const currTable = data?.user.tables[0];
+  const currTable = data?.user.tables[ind];
+  const slots = currTable?.schema
+    ? calculateSlots(currTable?.schema)["slots"]
+    : [];
 
   return (
     <div className="">
       {currTable?.schema?.name ? (
-        <div className="flex flex-col justify-center">
-          <CalendarContainer>
-            {currTable.schema && (
-              <>
-                <div className="">
-                  <Hours />
-                </div>
-                <div className="flex items-start justify-between gap-2">
-                  {Array.from({ length: numOfDays }).map((_, i) => (
-                    <OneDay key={i} day={calcSlotDay(i)} />
-                  ))}
-                </div>
-              </>
-            )}
-          </CalendarContainer>
-          <Slider
-            className="py-4 mx-auto"
-            defaultValue={[numOfDays]}
-            min={6}
-            max={40}
-            step={1}
-            onValueChange={(e) => setNumOfDays(e[0])}
-          />
+        <div>
+          <div className="flex justify-center">
+            <div className="p-2 border border-r-0">
+              <Hours demo={slots} />
+            </div>
+            <CalendarContainer>
+              {currTable.schema && (
+                <>
+                  <div className="flex items-start justify-between gap-2">
+                    {Array.from({ length: numOfDays }).map((_, i) => (
+                      <OneDay ind={ind} key={i} day={calcSlotDay(i)} />
+                    ))}
+                  </div>
+                </>
+              )}
+            </CalendarContainer>
+          </div>
+          <div>
+            <Slider
+              className="py-4 mx-auto"
+              defaultValue={[numOfDays]}
+              min={6}
+              max={40}
+              step={1}
+              onValueChange={(e) => setNumOfDays(e[0])}
+            />
+          </div>
         </div>
       ) : (
         <div className="flex items-center justify-center">
           {/* <Button className="p-8" variant={"outline"}>
             Create Table <Plus />
           </Button> */}
+          <p>Meow</p>
           <CreateTable />
         </div>
       )}
-      {currTable?.schema?.name && <CreateTable change />}
+      {/* {currTable?.schema?.name && <CreateTable change />} */}
     </div>
   );
 }

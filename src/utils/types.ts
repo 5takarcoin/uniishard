@@ -16,6 +16,7 @@ export interface tableStyleType {
 
 export interface tableType {
   _id: string;
+  name: string;
   schema: tableStyleType;
   title: string;
   slots: slotType[];

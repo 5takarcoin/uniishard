@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/store/services/authApi";
 import { useProfileQuery } from "@/store/services/dataApi";
+import { Hourglass } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -21,7 +22,7 @@ export function LoginCard() {
 
   const navigate = useNavigate();
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const { refetch } = useProfileQuery(undefined);
 
@@ -80,7 +81,7 @@ export function LoginCard() {
       </CardContent>
       <CardFooter className="flex flex-col justify-between">
         <Button onClick={handleClick} className="w-full">
-          Log in
+          {isLoading ? <Hourglass /> : "Log in"}
         </Button>
         <p className="pt-4 text-gray-400">
           Don't have an account?

@@ -23,10 +23,13 @@ import {
   useUpdateCurrTableMutation,
 } from "@/store/services/dataApi";
 import SelectExistingTable from "./SelectExistingTable";
+import { Input } from "../ui/input";
 
 export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("00ff00");
 
   const [weeklies, setWeeklies] = useState<slotType[]>([]);
   const [shape, setShape] = useState<tableStyleType>({} as tableStyleType);
@@ -40,12 +43,12 @@ export function CreateTable({ change = false }: { change?: boolean }) {
 
   const addSetTable = async (shape: tableStyleType) => {
     const got = await newStyle(shape);
-    console.log(got.data);
     return got.data;
   };
 
   const updateCurrTable = async (id: string) => {
     const tab = await newTable({
+      name,
       slots: [],
       owner: user?.user._id,
       schema: id,
@@ -80,7 +83,8 @@ export function CreateTable({ change = false }: { change?: boolean }) {
         </DialogHeader>
         <DialogDescription></DialogDescription>
         <div className="flex w-full h-[450px]">
-          <div className="">
+          <div className="flex-[1]">
+            {/* <Input value={name} onChange={(e) => setName(e.target.value)} /> */}
             {!existing ? (
               <NewSchema setShape={setShape} />
             ) : (
@@ -102,7 +106,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
                   <div className="h-[1px] bg-gray-500/50 flex-1"></div>
                 </div>
                 <div className="flex items-center gap-2 mt-4">
-                  <Label className="text-md "> Select Existing</Label>
+                  <Label className="text-md ">Select Existing</Label>
                   <Button
                     onClick={refetch}
                     className="text-md mt-1 px-3 rounded-full"
@@ -130,26 +134,46 @@ export function CreateTable({ change = false }: { change?: boolean }) {
             )}
           </div>
           <div className="w-[1px] bg-gray-500/30 mx-4 mb-2" />
-          <div className=" w-full ">
-            {/* Cursor */}
-            {existing && currentTable?.name && (
-              <CalCal currTable={currentTable!} setWeeklies={setWeeklies} />
-            )}
-            {!existing && shape?.name && (
-              <CalCal currTable={shape!} setWeeklies={setWeeklies} />
-            )}
-            {((existing && !currentTable?.name) ||
-              (!existing && !shape?.name)) && (
-              <div className="w-full h-full border flex items-center justify-center">
-                <DialogDescription className="text-center text-lg">
-                  <span className="">
-                    Select a Table <br />
-                    or <br />
-                    Create a new one
-                  </span>
-                </DialogDescription>
-              </div>
-            )}
+          <div className="w-full flex-1 flex flex-col gap-2">
+            <div className="flex items-center gap-4">
+              <Label>Name</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-1 w-72"
+              ></Input>
+              <Label>Color</Label>
+              <Input
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                maxLength={6}
+                className="mt-1 w-36 font-mono tracking-widest"
+              ></Input>
+              <span
+                className={`w-8 h-8 rounded-full mt-1 border bg-[#${color}]`}
+              ></span>
+            </div>
+            <div className="w-full flex-grow">
+              {/* Cursor */}
+              {existing && currentTable?.name && (
+                <CalCal currTable={currentTable!} setWeeklies={setWeeklies} />
+              )}
+              {!existing && shape?.name && (
+                <CalCal currTable={shape!} setWeeklies={setWeeklies} />
+              )}
+              {((existing && !currentTable?.name) ||
+                (!existing && !shape?.name)) && (
+                <div className="w-full h-full border flex items-center justify-center">
+                  <DialogDescription className="text-center">
+                    <span className="">
+                      Select a Table <br />
+                      or <br />
+                      Create a new one
+                    </span>
+                  </DialogDescription>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <DialogFooter>

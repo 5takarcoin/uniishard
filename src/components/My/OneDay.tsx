@@ -1,22 +1,23 @@
-import { selectSlots } from "@/store/selectors/selector";
-import { useSelector } from "react-redux";
 import { SlotInput } from "./SlotInput";
-import { dateInNumber, dayFromToday, reshapeSlots } from "@/utils/utils";
+import {
+  calculateSlots,
+  dateInNumber,
+  dayFromToday,
+  reshapeSlots,
+} from "@/utils/utils";
 import { useProfileQuery } from "@/store/services/dataApi";
-// import { SlotInput } from "./SlotInput";
 
-export default function OneDay({ day }: { day: Date }) {
-  const { numSlots } = useSelector(selectSlots);
-
+export default function OneDay({ day, ind }: { day: Date; ind: number }) {
   const { data } = useProfileQuery(undefined);
-  const rawSlots = data?.user?.tables[0]?.slots;
-  const rawWeeklies = data?.user?.tables[0]?.weekly;
+
+  const currTable = data?.user.tables[ind];
+  const { numSlots } = calculateSlots(currTable?.schema!);
+
+  const rawSlots = data?.user?.tables[ind]?.slots;
+  const rawWeeklies = data?.user?.tables[ind]?.weekly;
 
   const slots = reshapeSlots(rawSlots);
   const weeklies = reshapeSlots(rawWeeklies);
-
-  console.log("hoeeceklfjlk");
-  console.log(numSlots);
 
   return (
     <div>
@@ -44,16 +45,15 @@ export default function OneDay({ day }: { day: Date }) {
         </div>
         {numSlots.map((slot: number, i: number) => (
           <div
-            key={i}
+            key={ind + "_" + i}
             className="hover:bg-gray-800 w-32 rounded-md h-12 flex items-center justify-center"
           >
             <div className="w-full rounded-md h-12 border flex items-center justify-center">
               <SlotInput
                 exist={
                   slots
-                    ? weeklies[`${day.getDay()}${slot}`]
-                      ? weeklies[`${day.getDay()}${slot}`]
-                      : slots[Number(`${dateInNumber(day)}${slot}`)]
+                    ? slots[Number(`${dateInNumber(day)}${slot}`)] ||
+                      weeklies[`${day.getDay()}${slot}`]
                     : undefined
                 }
                 s={""}

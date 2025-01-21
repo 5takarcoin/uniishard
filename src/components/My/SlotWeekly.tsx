@@ -32,7 +32,6 @@ export function SlotWeekly({
   const [infos, setInfos] = useState<string[]>([]);
 
   const handleClick = () => {
-    console.log(day);
     setWeeklies((prev: slotType[]) => [
       ...prev,
       { title, infos, date: `${day}${dateStr}` },

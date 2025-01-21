@@ -17,9 +17,7 @@ export default function CalendarContainer({
       <div className="flex">
         <ScrollArea
           // onWheel={(e) => handleScroll(e)}
-          className={`${
-            small ? "max-h-[440px]" : "max-h-[600px]"
-          } whitespace-nowrap p-2`}
+          className={`${small ? "max-h-[400px]" : ""} whitespace-nowrap p-2`}
         >
           <div className="flex space-x-2 mb-2 mr-2">{children}</div>
           <ScrollBar orientation="horizontal" />
