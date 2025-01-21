@@ -11,7 +11,7 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { useProfileQuery } from "@/store/services/dataApi";
-import { ArrowRightIcon, Check, X } from "lucide-react";
+import { ArrowRightIcon, Eye, EyeOff } from "lucide-react";
 import { CreateTable } from "./CreateTable";
 
 export function AppSidebar({
@@ -44,15 +44,15 @@ export function AppSidebar({
                   <SidebarMenuButton asChild>
                     <div>
                       <Button
-                        className="border"
+                        className="border h-8 w-8 rounded-full -mr-2 opacity-30"
                         onClick={() => handleToggle(ind)}
                         variant={"link"}
                       >
-                        {item === 0 ? <X /> : <Check />}
+                        {item === 0 ? <EyeOff /> : <Eye />}
                       </Button>
                       <Button
                         onClick={() => setInd(ind)}
-                        variant={"link"}
+                        variant={"ghost"}
                         className={`${
                           ind === i ? "text-blue-400" : ""
                         } flex justify-between w-full`}

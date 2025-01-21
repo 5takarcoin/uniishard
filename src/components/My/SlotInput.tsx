@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Check, Edit2, Plus, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, Plus, X } from "lucide-react";
 
 import { removeIthElement } from "@/utils/utils";
 import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
@@ -97,14 +97,15 @@ export function SlotInput({
                     className="w-72"
                   />
                   <div className="flex flex-col">
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 items-center">
                       <Input
                         id="inp"
                         value={inp}
                         onChange={(e) => setInp(e.target.value)}
-                        className="w-56"
+                        className="w-60"
                       />
                       <Button
+                        className="h-8 w-8 rounded-full bg-white"
                         onClick={() => {
                           if (inp !== "") {
                             setTemp({
@@ -120,12 +121,12 @@ export function SlotInput({
                     </div>
                   </div>
                 </div>
-                <div className="text-center space-y-2 text-red-400">
+                <div className="text-center space-y-2 text-red-400 mr-2">
                   <p className="text-xs">Clear Entry</p>
                   <Button
                     onClick={clearSlot}
                     variant={"link"}
-                    className="border hover:bg-red-500/20 rounded-full border-red-400 text-red-400 w-12 h-12"
+                    className="border hover:bg-red-500/70 hover:text-white/70 rounded-full border-red-500 hover:border-red-500/70 text-red-400 w-8 h-8 "
                   >
                     <X />
                   </Button>
@@ -139,14 +140,19 @@ export function SlotInput({
                     {temp.infos.map((task: string, i: number) => (
                       <span
                         className={`flex w-full items-center gap-2 text-xs justify-between ${
-                          i !== infos.length - 1 ? "border-b pb-2" : ""
+                          i !== temp.infos.length - 1 && "border-b pb-2"
                         }`}
                         key={i}
                       >
-                        <span className="flex gap-2 items-center">
+                        <span className="w-full flex gap-2 items-center">
                           <Button
                             variant={"ghost"}
-                            className="h-8 w-8 rounded-full border"
+                            className={`h-8 w-8 rounded-full border 
+                            ${
+                              task[0] === "1" &&
+                              "bg-green-600 hover:bg-green-500"
+                            }
+                            `}
                             onClick={() => {
                               const t = [...temp.infos];
                               t[i] =
@@ -159,18 +165,66 @@ export function SlotInput({
                               });
                             }}
                           >
-                            {task[0] === "1" ? <Check /> : ""}
+                            {task[0] === "1" && <Check />}
                           </Button>
-                          <span key={i}>{task.substring(1)}</span>
+                          <span
+                            className=" w-full h-8 flex items-center"
+                            key={i}
+                          >
+                            {task[0] === "1" ? (
+                              <span className="text-sm line-through opacity-20">
+                                {task.substring(1)}
+                              </span>
+                            ) : (
+                              <Input
+                                value={task.substring(1)}
+                                onChange={(e) => {
+                                  const t = [...temp.infos];
+                                  t[i] = t[i][0] + e.target.value;
+                                  setTemp({
+                                    ...temp,
+                                    infos: t,
+                                  });
+                                }}
+                                className={`border-none focus-visible:ring-0 -ml-3`}
+                              ></Input>
+                            )}
+                          </span>
                         </span>
                         <span>
                           <Button
                             variant={"ghost"}
                             className="h-8 w-8 rounded-full"
-                            // onClick={//Edit Functionality
-                            // }
+                            onClick={() => {
+                              if (i === 0) return;
+                              const t = [...temp.infos];
+                              const tmp = t[i];
+                              t[i] = t[i - 1];
+                              t[i - 1] = tmp;
+                              setTemp({
+                                ...temp,
+                                infos: t,
+                              });
+                            }}
                           >
-                            <Edit2 />
+                            <ArrowUp />
+                          </Button>
+                          <Button
+                            variant={"ghost"}
+                            className="h-8 w-8 rounded-full"
+                            onClick={() => {
+                              if (i === temp.infos.length - 1) return;
+                              const t = [...temp.infos];
+                              const tmp = t[i];
+                              t[i] = t[i + 1];
+                              t[i + 1] = tmp;
+                              setTemp({
+                                ...temp,
+                                infos: t,
+                              });
+                            }}
+                          >
+                            <ArrowDown />
                           </Button>
                           <Button
                             variant={"ghost"}
