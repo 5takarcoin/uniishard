@@ -42,7 +42,7 @@ export function LoginCard() {
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle className="text-center  text-xl">Log In</CardTitle>
+        <CardTitle className="text-center text-xl">Log In</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription></CardDescription>

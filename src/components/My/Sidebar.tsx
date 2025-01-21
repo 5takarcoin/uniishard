@@ -11,12 +11,14 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { useProfileQuery } from "@/store/services/dataApi";
-import { Check, X } from "lucide-react";
+import { ArrowRightIcon, Check, X } from "lucide-react";
 import { CreateTable } from "./CreateTable";
 
 export function AppSidebar({
+  i,
   setInd,
 }: {
+  i: number;
   setInd: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const { data } = useProfileQuery(undefined);
@@ -48,8 +50,15 @@ export function AppSidebar({
                       >
                         {item === 0 ? <X /> : <Check />}
                       </Button>
-                      <Button onClick={() => setInd(ind)} variant={"link"}>
-                        {data?.user?.tables[ind].name}
+                      <Button
+                        onClick={() => setInd(ind)}
+                        variant={"link"}
+                        className={`${
+                          ind === i ? "text-blue-400" : ""
+                        } flex justify-between w-full`}
+                      >
+                        <span>{data?.user?.tables[ind].name} </span>
+                        <span>{ind === i ? <ArrowRightIcon /> : null}</span>
                       </Button>
                     </div>
                   </SidebarMenuButton>

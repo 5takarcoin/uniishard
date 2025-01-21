@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Check, Edit2, Plus, X } from "lucide-react";
 
 import { removeIthElement } from "@/utils/utils";
 import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
@@ -107,7 +107,10 @@ export function SlotInput({
                       <Button
                         onClick={() => {
                           if (inp !== "") {
-                            setTemp({ ...temp, infos: [...temp.infos, inp] });
+                            setTemp({
+                              ...temp,
+                              infos: [...temp.infos, "0" + inp],
+                            });
                             setInp("");
                           }
                         }}
@@ -124,7 +127,7 @@ export function SlotInput({
                     variant={"link"}
                     className="border hover:bg-red-500/20 rounded-full border-red-400 text-red-400 w-12 h-12"
                   >
-                    <X className="" />
+                    <X />
                   </Button>
                 </div>
               </div>
@@ -135,20 +138,53 @@ export function SlotInput({
                   <div className="flex flex-col gap-2">
                     {temp.infos.map((task: string, i: number) => (
                       <span
-                        className="flex w-full items-center gap-2 border py-2 pl-4 pr-2 text-xs justify-between"
+                        className={`flex w-full items-center gap-2 text-xs justify-between ${
+                          i !== infos.length - 1 ? "border-b pb-2" : ""
+                        }`}
                         key={i}
                       >
-                        <span key={i}>{task}</span>
-                        <button
-                          onClick={() =>
-                            setTemp({
-                              ...temp,
-                              infos: [...removeIthElement(temp.infos, i)],
-                            })
-                          }
-                        >
-                          <X className="h-4" />
-                        </button>
+                        <span className="flex gap-2 items-center">
+                          <Button
+                            variant={"ghost"}
+                            className="h-8 w-8 rounded-full border"
+                            onClick={() => {
+                              const t = [...temp.infos];
+                              t[i] =
+                                t[i][0] === "0"
+                                  ? "1" + t[i].substring(1)
+                                  : "0" + t[i].substring(1);
+                              setTemp({
+                                ...temp,
+                                infos: t,
+                              });
+                            }}
+                          >
+                            {task[0] === "1" ? <Check /> : ""}
+                          </Button>
+                          <span key={i}>{task.substring(1)}</span>
+                        </span>
+                        <span>
+                          <Button
+                            variant={"ghost"}
+                            className="h-8 w-8 rounded-full"
+                            // onClick={//Edit Functionality
+                            // }
+                          >
+                            <Edit2 />
+                          </Button>
+                          <Button
+                            variant={"ghost"}
+                            className="h-8 w-8 rounded-full"
+                            onClick={() =>
+                              setTemp({
+                                ...temp,
+                                infos: [...removeIthElement(temp.infos, i)],
+                              })
+                            }
+                          >
+                            <X />
+                          </Button>
+                        </span>
                       </span>
                     ))}
                   </div>
