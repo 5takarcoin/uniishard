@@ -1,11 +1,19 @@
 import CalendarContainer from "./CalendarContainer";
-import { tableStyleType } from "@/utils/types";
+import { slotType, tableStyleType } from "@/utils/types";
 import Hours from "./Hours";
 import { calculateSlots } from "@/utils/utils";
+import { SlotWeekly } from "./SlotWeekly";
 
-export default function CalCal({ currTable }: { currTable: tableStyleType }) {
-  const numSlots = calculateSlots(currTable)["slots"];
-
+export default function CalCal({
+  currTable,
+  setWeeklies,
+}: {
+  currTable: tableStyleType;
+  setWeeklies: React.Dispatch<React.SetStateAction<slotType[]>>;
+}) {
+  const { slots, numSlots } = calculateSlots(currTable);
+  console.log("numslots");
+  console.log(numSlots);
   return (
     <div className="flex flex-col">
       {currTable && (
@@ -13,7 +21,7 @@ export default function CalCal({ currTable }: { currTable: tableStyleType }) {
           <CalendarContainer small>
             {currTable && (
               <>
-                <Hours demo={numSlots} />
+                <Hours demo={slots} />
                 <div className="flex items-start justify-between gap-2">
                   {[
                     "Sunday",
@@ -25,17 +33,23 @@ export default function CalCal({ currTable }: { currTable: tableStyleType }) {
                     "Saturday",
                   ].map((day, i) => {
                     return (
-                      <div>
+                      <div key={i}>
                         <div className="flex flex-col items-center justify-between gap-2">
                           <div className="w-32 text-center rounded-md p-2 border flex flex-col text">
-                            <span key={i}>{day}</span>
+                            <span>{day}</span>
                           </div>
-                          {numSlots.map((_, i) => (
+                          {numSlots.map((num, index) => (
                             <div
-                              key={i}
+                              key={index}
                               className="hover:bg-gray-800 w-32 rounded-md h-12 flex items-center justify-center"
                             >
-                              <div className="w-full rounded-md h-12 border flex items-center justify-center"></div>
+                              <div className="w-full rounded-md h-12 border flex items-center justify-center">
+                                <SlotWeekly
+                                  day={i}
+                                  dateStr={num}
+                                  setWeeklies={setWeeklies}
+                                />
+                              </div>
                             </div>
                           ))}
                         </div>

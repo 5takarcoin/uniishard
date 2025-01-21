@@ -19,6 +19,7 @@ export interface tableType {
   schema: tableStyleType;
   title: string;
   slots: slotType[];
+  weekly: slotType[];
 }
 
 export interface slotType {

@@ -12,7 +12,7 @@ import {
 import { ChevronLeft, Plus, RefreshCcw, X } from "lucide-react";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
-import { tableStyleType } from "@/utils/types";
+import { slotType, tableStyleType } from "@/utils/types";
 import CalCal from "./CalCal";
 import NewSchema from "./NewSchema";
 import {
@@ -28,6 +28,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
 
+  const [weeklies, setWeeklies] = useState<slotType[]>([]);
   const [shape, setShape] = useState<tableStyleType>({} as tableStyleType);
 
   const { data: tables, refetch } = useAllStylesQuery(undefined);
@@ -48,13 +49,23 @@ export function CreateTable({ change = false }: { change?: boolean }) {
       slots: [],
       owner: user?.user._id,
       schema: id,
+      weekly: weeklies,
     });
     await upCT({ body: { currTable: tab.data._id }, id: user?.user.username });
     refetchUser();
   };
 
+  const handleSave = async () => {
+    if (!existing) {
+      const tab = await addSetTable(shape);
+      await updateCurrTable(tab._id);
+    } else {
+      await updateCurrTable(currentTable!._id!);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setWeeklies([])}>
       <DialogTrigger asChild>
         <Button className="p-8 w-48" variant="outline">
           {!change ? "Create" : "Change"} Table <Plus />
@@ -122,9 +133,11 @@ export function CreateTable({ change = false }: { change?: boolean }) {
           <div className=" w-full ">
             {/* Cursor */}
             {existing && currentTable?.name && (
-              <CalCal currTable={currentTable!} />
+              <CalCal currTable={currentTable!} setWeeklies={setWeeklies} />
             )}
-            {!existing && shape?.name && <CalCal currTable={shape!} />}
+            {!existing && shape?.name && (
+              <CalCal currTable={shape!} setWeeklies={setWeeklies} />
+            )}
             {((existing && !currentTable?.name) ||
               (!existing && !shape?.name)) && (
               <div className="w-full h-full border flex items-center justify-center">
@@ -142,18 +155,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
         <DialogFooter>
           <div className="flex flex-row-reverse direction-reverse justify-between w-full">
             <DialogClose asChild>
-              <Button
-                onClick={async () => {
-                  if (!existing) {
-                    const tab = await addSetTable(shape);
-                    await updateCurrTable(tab._id);
-                  } else {
-                    await updateCurrTable(currentTable!._id!);
-                  }
-                }}
-                type="button"
-                variant="default"
-              >
+              <Button onClick={handleSave} type="button" variant="default">
                 Save
               </Button>
             </DialogClose>

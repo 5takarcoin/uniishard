@@ -10,7 +10,13 @@ export default function OneDay({ day }: { day: Date }) {
 
   const { data } = useProfileQuery(undefined);
   const rawSlots = data?.user?.tables[0]?.slots;
+  const rawWeeklies = data?.user?.tables[0]?.weekly;
+
   const slots = reshapeSlots(rawSlots);
+  const weeklies = reshapeSlots(rawWeeklies);
+
+  console.log("hoeeceklfjlk");
+  console.log(numSlots);
 
   return (
     <div>
@@ -45,7 +51,9 @@ export default function OneDay({ day }: { day: Date }) {
               <SlotInput
                 exist={
                   slots
-                    ? slots[Number(`${dateInNumber(day)}${slot}`)]
+                    ? weeklies[`${day.getDay()}${slot}`]
+                      ? weeklies[`${day.getDay()}${slot}`]
+                      : slots[Number(`${dateInNumber(day)}${slot}`)]
                     : undefined
                 }
                 s={""}

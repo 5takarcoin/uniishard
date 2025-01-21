@@ -22,7 +22,9 @@ export default function Calendar() {
           <CalendarContainer>
             {currTable.schema && (
               <>
-                <Hours />
+                <div className="">
+                  <Hours />
+                </div>
                 <div className="flex items-start justify-between gap-2">
                   {Array.from({ length: numOfDays }).map((_, i) => (
                     <OneDay key={i} day={calcSlotDay(i)} />

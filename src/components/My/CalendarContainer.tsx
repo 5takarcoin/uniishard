@@ -21,7 +21,7 @@ export default function CalendarContainer({
             small ? "max-h-[440px]" : "max-h-[600px]"
           } whitespace-nowrap p-2`}
         >
-          <div className="flex space-x-2">{children}</div>
+          <div className="flex space-x-2 mb-2 mr-2">{children}</div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>

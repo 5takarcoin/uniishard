@@ -15,47 +15,33 @@ import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
 import { removeIthElement } from "@/utils/utils";
-import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { slotType } from "@/utils/types";
 
-export function SlotInput({
+export function SlotWeekly({
+  day,
   dateStr,
-  date,
-  s,
-  exist,
+  setWeeklies,
 }: {
+  day: number;
   dateStr: number;
-  s: string;
-  date: Date;
-  exist?: { title: string; infos: string[] };
+  setWeeklies: React.Dispatch<React.SetStateAction<slotType[]>>;
 }) {
-  const [title, setTitle] = useState(exist?.title || "");
+  const [title, setTitle] = useState("");
   const [inp, setInp] = useState("");
-  const [infos, setInfos] = useState<string[]>(exist?.infos || []);
-  const [newSlot] = useNewSlotMutation();
+  const [infos, setInfos] = useState<string[]>([]);
 
-  const [temp, setTemp] = useState<{ title: string; infos: string[] }>({
-    title,
-    infos,
-  });
-
-  const { data } = useProfileQuery(undefined);
-
-  const handleClick = async () => {
-    try {
-      setTitle(temp.title);
-      setInfos(temp.infos);
-      await newSlot({
-        body: { ...temp, date: dateStr },
-        id: data?.user.tables[0]?._id,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  const handleClick = () => {
+    console.log(day);
+    setWeeklies((prev: slotType[]) => [
+      ...prev,
+      { title, infos, date: `${day}${dateStr}` },
+    ]);
   };
 
   const clearSlot = () => {
-    setTemp({ title: "", infos: [] });
+    setTitle("");
+    setInfos([]);
     setInp("");
   };
 
@@ -63,21 +49,13 @@ export function SlotInput({
     <Dialog>
       <DialogTrigger asChild>
         <Button className="h-full w-full" variant="ghost">
-          {title === temp.title ? title : "Unsaved"}
+          {title}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>
-          <DialogDescription>
-            {s && (
-              <>
-                {s}
-                {" - "}
-              </>
-            )}
-            {date && date.toLocaleDateString("en-GB")}
-          </DialogDescription>
+          <DialogDescription>{dateStr}</DialogDescription>
         </DialogHeader>
         <DialogDescription className="flex gap-2"></DialogDescription>
         <div className="">
@@ -90,10 +68,8 @@ export function SlotInput({
                   </Label>
                   <Input
                     id="name"
-                    value={temp.title}
-                    onChange={(e) =>
-                      setTemp({ ...temp, title: e.target.value })
-                    }
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     className="w-72"
                   />
                   <div className="flex flex-col">
@@ -107,7 +83,7 @@ export function SlotInput({
                       <Button
                         onClick={() => {
                           if (inp !== "") {
-                            setTemp({ ...temp, infos: [...temp.infos, inp] });
+                            setInfos([...infos, inp]);
                             setInp("");
                           }
                         }}
@@ -133,7 +109,7 @@ export function SlotInput({
                   className={`max-h-[400px] w-[380px] whitespace-nowrap p-2`}
                 >
                   <div className="flex flex-col gap-2">
-                    {temp.infos.map((task: string, i: number) => (
+                    {infos.map((task: string, i: number) => (
                       <span
                         className="flex w-full items-center gap-2 border py-2 pl-4 pr-2 text-xs justify-between"
                         key={i}
@@ -141,10 +117,7 @@ export function SlotInput({
                         <span key={i}>{task}</span>
                         <button
                           onClick={() =>
-                            setTemp({
-                              ...temp,
-                              infos: [...removeIthElement(temp.infos, i)],
-                            })
+                            setInfos(() => [...removeIthElement(infos, i)])
                           }
                         >
                           <X className="h-4" />
