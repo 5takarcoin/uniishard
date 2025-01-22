@@ -17,22 +17,28 @@ import { ArrowDown, ArrowUp, Check, Plus, X } from "lucide-react";
 import { removeIthElement } from "@/utils/utils";
 import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { deepEqual } from "@/lib/utils";
+import { getContrastColor } from "@/lib/colorUtils";
 
 export function SlotInput({
   dateStr,
   date,
   s,
   exist,
+  color = "#000000",
 }: {
   dateStr: number;
   s: string;
   date: Date;
   exist?: { title: string; infos: string[] };
+  color?: string;
 }) {
   const [title, setTitle] = useState(exist?.title || "");
   const [inp, setInp] = useState("");
   const [infos, setInfos] = useState<string[]>(exist?.infos || []);
   const [newSlot] = useNewSlotMutation();
+
+  const textColor = getContrastColor(color);
 
   const [temp, setTemp] = useState<{ title: string; infos: string[] }>({
     title,
@@ -62,8 +68,22 @@ export function SlotInput({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="h-full w-full" variant="ghost">
-          {title === temp.title ? title : "Unsaved"}
+        <Button
+          // style={{ backgroundColor: (title || temp.title) && color, color: (title || temp.title) && textColor }}
+          style={
+            title || temp.title
+              ? { backgroundColor: color, color: textColor }
+              : {}
+          }
+          className={`h-full w-full ${
+            !deepEqual({ title, infos }, temp) &&
+            "border opacity-60 border-yellow-400 bg-black"
+          }`}
+          variant="ghost"
+        >
+          {!deepEqual({ title, infos }, temp) && (
+            <span className="text-yellow-400 text-xs font-thin">Unsaved</span>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[425px]">

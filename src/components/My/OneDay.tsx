@@ -6,8 +6,17 @@ import {
   reshapeSlots,
 } from "@/utils/utils";
 import { useProfileQuery } from "@/store/services/dataApi";
+import { getContrastColor } from "@/lib/colorUtils";
 
-export default function OneDay({ day, ind }: { day: Date; ind: number }) {
+export default function OneDay({
+  day,
+  ind,
+  color = "#000000",
+}: {
+  day: Date;
+  ind: number;
+  color?: string;
+}) {
   const { data } = useProfileQuery(undefined);
 
   const currTable = data?.user.tables[ind];
@@ -19,10 +28,15 @@ export default function OneDay({ day, ind }: { day: Date; ind: number }) {
   const slots = reshapeSlots(rawSlots);
   const weeklies = reshapeSlots(rawWeeklies);
 
+  const textColor = getContrastColor(color);
+
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-2">
-        <div className="w-32 text-center rounded-md p-2 border flex flex-col text">
+        <div
+          style={{ backgroundColor: color, color: textColor }}
+          className="w-32 text-center rounded-md p-2 border flex flex-col text"
+        >
           {/* <span>{Number(day)}</span> */}
           <p></p>
           {dayFromToday(day) < 7 ? (
@@ -50,6 +64,7 @@ export default function OneDay({ day, ind }: { day: Date; ind: number }) {
           >
             <div className="w-full rounded-md h-12 border flex items-center justify-center">
               <SlotInput
+                color={color}
                 exist={
                   slots
                     ? slots[Number(`${dateInNumber(day)}${slot}`)] ||

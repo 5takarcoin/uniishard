@@ -21,16 +21,21 @@ export default function Calendar({ ind }: { ind: number }) {
     <div className="">
       {currTable?.schema?.name ? (
         <div>
-          <div className="flex justify-center">
+          <div className="flex justify-center bg-background">
             <div className="p-2 border rounded-l-md border-r-0">
-              <Hours demo={slots} />
+              <Hours color={currTable.color} demo={slots} />
             </div>
             <CalendarContainer>
               {currTable.schema && (
                 <>
                   <div className="flex items-start justify-between gap-2">
                     {Array.from({ length: numOfDays }).map((_, i) => (
-                      <OneDay ind={ind} key={i} day={calcSlotDay(i)} />
+                      <OneDay
+                        color={currTable.color}
+                        ind={ind}
+                        key={i}
+                        day={calcSlotDay(i)}
+                      />
                     ))}
                   </div>
                 </>

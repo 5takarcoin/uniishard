@@ -36,6 +36,28 @@ export function AppSidebar({
     <Sidebar collapsible="none" className="border-r bg-background w-full p-4">
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel className="text-lg pb-4">
+            Overview
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <div>
+                  <Button
+                    className="border h-8 w-8 rounded-full -mr-2 opacity-30"
+                    variant={"link"}
+                  >
+                    <Eye />
+                  </Button>
+                  <Button variant={"ghost"} className="">
+                    <span>uhu</span>
+                    <span>aha</span>
+                  </Button>
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroupContent>
+          {/* <Collapsible> */}
           <SidebarGroupLabel className="text-lg pb-4">Tables</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">
@@ -57,7 +79,9 @@ export function AppSidebar({
                           ind === i ? "text-blue-400" : ""
                         } flex justify-between w-full`}
                       >
-                        <span>{data?.user?.tables[ind].name} </span>
+                        <span className={`${item === 0 && "opacity-30"}`}>
+                          {data?.user?.tables[ind].name}{" "}
+                        </span>
                         <span>{ind === i ? <ArrowRightIcon /> : null}</span>
                       </Button>
                     </div>
@@ -66,6 +90,7 @@ export function AppSidebar({
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
+          {/* </Collapsible> */}
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupContent>

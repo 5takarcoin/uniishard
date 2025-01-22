@@ -21,6 +21,7 @@ export interface tableType {
   title: string;
   slots: slotType[];
   weekly: slotType[];
+  color: string;
 }
 
 export interface slotType {

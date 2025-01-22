@@ -24,12 +24,14 @@ import {
 } from "@/store/services/dataApi";
 import SelectExistingTable from "./SelectExistingTable";
 import { Input } from "../ui/input";
+import { CirclePicker } from "react-color";
 
 export function CreateTable({ change = false }: { change?: boolean }) {
   const [existing, setExisting] = useState(true);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
   const [name, setName] = useState("");
-  const [color, setColor] = useState("00ff00");
+  const [color, setColor] = useState("#000000");
+  const [openColor, setOpenColor] = useState(false);
 
   const [weeklies, setWeeklies] = useState<slotType[]>([]);
   const [shape, setShape] = useState<tableStyleType>({} as tableStyleType);
@@ -53,6 +55,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
       owner: user?.user._id,
       schema: id,
       weekly: weeklies,
+      color: color || "#000000",
     });
     await upCT({ body: { currTable: tab.data._id }, id: user?.user.username });
     refetchUser();
@@ -146,12 +149,28 @@ export function CreateTable({ change = false }: { change?: boolean }) {
               <Input
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                maxLength={6}
+                maxLength={7}
                 className="mt-1 w-36 font-mono tracking-widest"
+                onFocus={() => setOpenColor(false)}
               ></Input>
-              <span
-                className={`w-8 h-8 rounded-full mt-1 border bg-[#${color}]`}
-              ></span>
+
+              {/* Maybe Use Dialog */}
+              <span className="relative">
+                <Button
+                  onClick={() => setOpenColor((o) => !o)}
+                  style={{ backgroundColor: color }}
+                  className={`w-8 h-8 rounded-full mt-1 border`}
+                ></Button>
+                {openColor && (
+                  <CirclePicker
+                    onChange={(c) => {
+                      setOpenColor((o) => !o);
+                      setColor(c.hex);
+                    }}
+                    className="absolute z-50 bg-black border p-4 left-4 top-10 -translate-x-1/2"
+                  />
+                )}
+              </span>
             </div>
             <div className="w-full flex-grow">
               {/* Cursor */}
