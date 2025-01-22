@@ -20,8 +20,8 @@ export default function Calendar({ ind }: { ind: number }) {
   return (
     <div className="">
       {currTable?.schema?.name ? (
-        <div>
-          <div className="flex justify-center bg-background">
+        <div className="space-y-4">
+          <div className="flex drop-shadow-md  justify-center bg-background">
             <div className="p-2 border rounded-l-md border-r-0">
               <Hours color={currTable.color} demo={slots} />
             </div>

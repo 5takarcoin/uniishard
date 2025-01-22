@@ -40,22 +40,24 @@ export function AppSidebar({
             Overview
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <div>
-                  <Button
-                    className="border h-8 w-8 rounded-full -mr-2 opacity-30"
-                    variant={"link"}
-                  >
-                    <Eye />
-                  </Button>
-                  <Button variant={"ghost"} className="">
-                    <span>uhu</span>
-                    <span>aha</span>
-                  </Button>
-                </div>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <SidebarMenu className="gap-2">
+              <SidebarMenuItem>
+                <SidebarMenuButton className="py-6" asChild>
+                  <div className="mb-8">
+                    <Button
+                      onClick={() => setInd(-1)}
+                      variant={"ghost"}
+                      className={`${
+                        i === -1 ? "text-blue-400" : ""
+                      } flex justify-between w-full`}
+                    >
+                      <span className=" -ml-1 text-base">Upcoming Tasks</span>
+                      <span>{-1 === i ? <ArrowRightIcon /> : null}</span>
+                    </Button>
+                  </div>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarGroupContent>
           {/* <Collapsible> */}
           <SidebarGroupLabel className="text-lg pb-4">Tables</SidebarGroupLabel>

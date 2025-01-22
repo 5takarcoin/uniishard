@@ -29,3 +29,8 @@ export interface slotType {
   title: string;
   infos: string[];
 }
+
+export interface priorityType {
+  name: string;
+  color: string;
+}

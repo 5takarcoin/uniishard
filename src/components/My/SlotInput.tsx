@@ -19,6 +19,14 @@ import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { deepEqual } from "@/lib/utils";
 import { getContrastColor } from "@/lib/colorUtils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { priorityType } from "@/utils/types";
 
 export function SlotInput({
   dateStr,
@@ -39,7 +47,12 @@ export function SlotInput({
   const [newSlot] = useNewSlotMutation();
 
   const textColor = getContrastColor(color);
-
+  const priorities: priorityType[] = [
+    { name: "Diamond", color: "#b9f2ff" }, // Diamond color is often represented as a light blue
+    { name: "Gold", color: "#ffd700" }, // Gold color
+    { name: "Silver", color: "#c0c0c0" }, // Silver color
+  ];
+  // const [selectedPriority, setSelectedPriority] = useState<string>("None");
   const [temp, setTemp] = useState<{ title: string; infos: string[] }>({
     title,
     infos,
@@ -130,7 +143,7 @@ export function SlotInput({
                           if (inp !== "") {
                             setTemp({
                               ...temp,
-                              infos: [...temp.infos, "0" + inp],
+                              infos: [...temp.infos, "N0" + inp],
                             });
                             setInp("");
                           }
@@ -169,35 +182,35 @@ export function SlotInput({
                             variant={"ghost"}
                             className={`h-8 w-8 rounded-full border 
                             ${
-                              task[0] === "1" &&
+                              task[1] === "1" &&
                               "bg-green-600 hover:bg-green-500"
                             }
                             `}
                             onClick={() => {
                               const t = [...temp.infos];
                               t[i] =
-                                t[i][0] === "0"
-                                  ? "1" + t[i].substring(1)
-                                  : "0" + t[i].substring(1);
+                                t[i][1] === "0"
+                                  ? t[i][0] + "1" + t[i].substring(2)
+                                  : t[i][0] + "0" + t[i].substring(2);
                               setTemp({
                                 ...temp,
                                 infos: t,
                               });
                             }}
                           >
-                            {task[0] === "1" && <Check />}
+                            {task[1] === "1" && <Check />}
                           </Button>
                           <span
                             className=" w-full h-8 flex items-center"
                             key={i}
                           >
-                            {task[0] === "1" ? (
+                            {task[1] === "1" ? (
                               <span className="text-sm line-through opacity-20">
-                                {task.substring(1)}
+                                {task.substring(2)}
                               </span>
                             ) : (
                               <Input
-                                value={task.substring(1)}
+                                value={task.substring(2)}
                                 onChange={(e) => {
                                   const t = [...temp.infos];
                                   t[i] = t[i][0] + e.target.value;
@@ -211,7 +224,7 @@ export function SlotInput({
                             )}
                           </span>
                         </span>
-                        <span>
+                        <span className="flex">
                           <Button
                             variant={"ghost"}
                             className="h-8 w-8 rounded-full"
@@ -258,6 +271,55 @@ export function SlotInput({
                           >
                             <X />
                           </Button>
+                          <div className="">
+                            <Select
+                              value={temp.infos[i][0]}
+                              onValueChange={(e) => {
+                                const t = [...temp.infos];
+                                t[i] = e + t[i].substring(1);
+                                setTemp({
+                                  ...temp,
+                                  infos: t,
+                                });
+                              }}
+                            >
+                              <SelectTrigger
+                                id="popup-select-trigger"
+                                className="w-32 h-8 rounded-full focus-visible:ring-0"
+                              >
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+
+                              <SelectContent position="popper">
+                                {priorities.map(
+                                  (p: priorityType, i: number) => (
+                                    <SelectItem key={i} value={p.name[0]}>
+                                      <div className="flex gap-2 justify-between items-center">
+                                        <div
+                                          style={{ backgroundColor: p.color }}
+                                          className="h-4 w-4 bg-red-300 rounded-full"
+                                        ></div>
+                                        <span style={{ color: p.color }}>
+                                          {p.name}
+                                        </span>{" "}
+                                      </div>
+                                    </SelectItem>
+                                  )
+                                )}
+                                <SelectItem key={i} value={"N"}>
+                                  <div className="flex gap-2 justify-between items-center">
+                                    <div
+                                      style={{ backgroundColor: "#121212" }}
+                                      className="h-4 w-4 border rounded-full"
+                                    ></div>
+                                    <span style={{ color: "#ffffff" }}>
+                                      None
+                                    </span>{" "}
+                                  </div>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </span>
                       </span>
                     ))}
