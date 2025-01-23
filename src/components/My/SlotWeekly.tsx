@@ -14,18 +14,31 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Check, Plus, X } from "lucide-react";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { removeIthElement } from "@/utils/utils";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { slotType } from "@/utils/types";
+import { priorityType, slotType } from "@/utils/types";
+import { priorities } from "@/utils/data";
+import { deepEqual } from "@/lib/utils";
+import { getContrastColor } from "@/lib/colorUtils";
 
 export function SlotWeekly({
   day,
   dateStr,
   setWeeklies,
+  color = "#000000",
 }: {
   day: number;
   dateStr: number;
   setWeeklies: React.Dispatch<React.SetStateAction<slotType[]>>;
+  color: string;
 }) {
   const [title, setTitle] = useState("");
   const [inp, setInp] = useState("");
@@ -45,6 +58,8 @@ export function SlotWeekly({
     ]);
   };
 
+  const textColor = getContrastColor(color);
+
   const clearSlot = () => {
     setTitle("");
     setInfos([]);
@@ -54,8 +69,22 @@ export function SlotWeekly({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="h-full w-full" variant="ghost">
-          {title === temp.title ? title : "Unsaved"}
+        <Button
+          // style={{ backgroundColor: (title || temp.title) && color, color: (title || temp.title) && textColor }}
+          style={
+            title || temp.title
+              ? { backgroundColor: color, color: textColor }
+              : {}
+          }
+          className={`h-full w-full ${
+            !deepEqual({ title, infos }, temp) &&
+            "border opacity-60 border-yellow-400 bg-black"
+          }`}
+          variant="ghost"
+        >
+          {!deepEqual({ title, infos }, temp) && (
+            <span className="text-yellow-400 text-xs font-thin">Unsaved</span>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[425px]">
@@ -94,7 +123,7 @@ export function SlotWeekly({
                           if (inp !== "") {
                             setTemp({
                               ...temp,
-                              infos: [...temp.infos, "0" + inp],
+                              infos: [...temp.infos, "N0" + inp],
                             });
                             setInp("");
                           }
@@ -133,38 +162,39 @@ export function SlotWeekly({
                             variant={"ghost"}
                             className={`h-8 w-8 rounded-full border 
                             ${
-                              task[0] === "1" &&
+                              task[1] === "1" &&
                               "bg-green-600 hover:bg-green-500"
                             }
                             `}
                             onClick={() => {
                               const t = [...temp.infos];
                               t[i] =
-                                t[i][0] === "0"
-                                  ? "1" + t[i].substring(1)
-                                  : "0" + t[i].substring(1);
+                                t[i][1] === "0"
+                                  ? t[i][0] + "1" + t[i].substring(2)
+                                  : t[i][0] + "0" + t[i].substring(2);
                               setTemp({
                                 ...temp,
                                 infos: t,
                               });
                             }}
                           >
-                            {task[0] === "1" && <Check />}
+                            {task[1] === "1" && <Check />}
                           </Button>
                           <span
                             className=" w-full h-8 flex items-center"
                             key={i}
                           >
-                            {task[0] === "1" ? (
+                            {task[1] === "1" ? (
                               <span className="text-sm line-through opacity-20">
-                                {task.substring(1)}
+                                {task.substring(2)}
                               </span>
                             ) : (
+                              // Ahhhaaa
                               <Input
-                                value={task.substring(1)}
+                                value={task.substring(2)}
                                 onChange={(e) => {
                                   const t = [...temp.infos];
-                                  t[i] = t[i][0] + e.target.value;
+                                  t[i] = t[i][0] + t[i][1] + e.target.value;
                                   setTemp({
                                     ...temp,
                                     infos: t,
@@ -175,7 +205,7 @@ export function SlotWeekly({
                             )}
                           </span>
                         </span>
-                        <span>
+                        <span className="flex">
                           <Button
                             variant={"ghost"}
                             className="h-8 w-8 rounded-full"
@@ -222,6 +252,55 @@ export function SlotWeekly({
                           >
                             <X />
                           </Button>
+                          <div className="">
+                            <Select
+                              value={temp.infos[i][0]}
+                              onValueChange={(e) => {
+                                const t = [...temp.infos];
+                                t[i] = e + t[i].substring(1);
+                                setTemp({
+                                  ...temp,
+                                  infos: t,
+                                });
+                              }}
+                            >
+                              <SelectTrigger
+                                id="popup-select-trigger"
+                                className="w-32 h-8 rounded-full focus-visible:ring-0"
+                              >
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+
+                              <SelectContent position="popper">
+                                {priorities.map(
+                                  (p: priorityType, i: number) => (
+                                    <SelectItem key={i} value={p.name[0]}>
+                                      <div className="flex gap-2 justify-between items-center">
+                                        <div
+                                          style={{ backgroundColor: p.color }}
+                                          className="h-4 w-4 bg-red-300 rounded-full"
+                                        ></div>
+                                        <span style={{ color: p.color }}>
+                                          {p.name}
+                                        </span>{" "}
+                                      </div>
+                                    </SelectItem>
+                                  )
+                                )}
+                                <SelectItem key={i} value={"N"}>
+                                  <div className="flex gap-2 justify-between items-center">
+                                    <div
+                                      style={{ backgroundColor: "#121212" }}
+                                      className="h-4 w-4 border rounded-full"
+                                    ></div>
+                                    <span style={{ color: "#ffffff" }}>
+                                      None
+                                    </span>{" "}
+                                  </div>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </span>
                       </span>
                     ))}

@@ -175,10 +175,18 @@ export function CreateTable({ change = false }: { change?: boolean }) {
             <div className="w-full flex-grow">
               {/* Cursor */}
               {existing && currentTable?.name && (
-                <CalCal currTable={currentTable!} setWeeklies={setWeeklies} />
+                <CalCal
+                  color={color}
+                  currTable={currentTable!}
+                  setWeeklies={setWeeklies}
+                />
               )}
               {!existing && shape?.name && (
-                <CalCal currTable={shape!} setWeeklies={setWeeklies} />
+                <CalCal
+                  color={color}
+                  currTable={shape!}
+                  setWeeklies={setWeeklies}
+                />
               )}
               {((existing && !currentTable?.name) ||
                 (!existing && !shape?.name)) && (

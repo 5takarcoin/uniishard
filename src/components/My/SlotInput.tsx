@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { priorityType } from "@/utils/types";
+import { priorities } from "@/utils/data";
 
 export function SlotInput({
   dateStr,
@@ -47,11 +48,7 @@ export function SlotInput({
   const [newSlot] = useNewSlotMutation();
 
   const textColor = getContrastColor(color);
-  const priorities: priorityType[] = [
-    { name: "Diamond", color: "#b9f2ff" }, // Diamond color is often represented as a light blue
-    { name: "Gold", color: "#ffd700" }, // Gold color
-    { name: "Silver", color: "#c0c0c0" }, // Silver color
-  ];
+
   // const [selectedPriority, setSelectedPriority] = useState<string>("None");
   const [temp, setTemp] = useState<{ title: string; infos: string[] }>({
     title,
