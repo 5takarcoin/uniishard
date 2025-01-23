@@ -13,7 +13,7 @@ export default function CalendarContainer({
   //   console.log(e);
   // }
   return (
-    <div className="max-w-[900px] whitespace-nowrap rounded-r-md border">
+    <div className="max-w-[960px] whitespace-nowrap rounded-r-md border">
       <div className="flex">
         <ScrollArea
           // onWheel={(e) => handleScroll(e)}

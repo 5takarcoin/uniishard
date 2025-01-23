@@ -21,7 +21,7 @@ export function AppSidebar({
   i: number;
   setInd: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const { data } = useProfileQuery(undefined);
+  const { data, refetch } = useProfileQuery(undefined);
   const l: number = data?.user?.tables?.length!;
   const a = Array.from({ length: l }, () => 1);
   const [arr, setArr] = useState(a);
@@ -43,9 +43,12 @@ export function AppSidebar({
             <SidebarMenu className="gap-2">
               <SidebarMenuItem>
                 <SidebarMenuButton className="py-6" asChild>
-                  <div className="mb-8">
+                  <div className="">
                     <Button
-                      onClick={() => setInd(-1)}
+                      onClick={() => {
+                        refetch();
+                        setInd(-1);
+                      }}
                       variant={"ghost"}
                       className={`${
                         i === -1 ? "text-blue-400" : ""
@@ -59,16 +62,35 @@ export function AppSidebar({
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
+
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <CreateTable />
+            </SidebarGroupContent>
+          </SidebarGroup>
           {/* <Collapsible> */}
-          <SidebarGroupLabel className="text-lg pb-4">Tables</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg pb-4 mt-4">
+            Tables
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">
               {arr.map((item, ind) => (
                 <SidebarMenuItem key={ind}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    style={{
+                      color: data?.user?.tables[ind].color,
+                      // color: getContrastColor(
+                      //   data?.user?.tables[ind].color || "#000000"
+                      // ),
+                    }}
+                    asChild
+                    className="rounded-full"
+                  >
                     <div>
                       <Button
-                        className="border h-8 w-8 rounded-full -mr-2 opacity-30"
+                        className={`${
+                          item === 0 && "text-muted"
+                        } border h-6 max-w-4 bg-background rounded-full -ml-1`}
                         onClick={() => handleToggle(ind)}
                         variant={"link"}
                       >
@@ -79,10 +101,10 @@ export function AppSidebar({
                         variant={"ghost"}
                         className={`${
                           ind === i ? "text-blue-400" : ""
-                        } flex justify-between w-full`}
+                        } flex justify-between w-full h-6 -ml-1 -mr-1 rounded-full`}
                       >
                         <span className={`${item === 0 && "opacity-30"}`}>
-                          {data?.user?.tables[ind].name}{" "}
+                          {data?.user?.tables[ind].name}
                         </span>
                         <span>{ind === i ? <ArrowRightIcon /> : null}</span>
                       </Button>
@@ -93,11 +115,6 @@ export function AppSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
           {/* </Collapsible> */}
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <CreateTable />
-          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

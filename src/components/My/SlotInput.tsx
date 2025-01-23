@@ -213,7 +213,7 @@ export function SlotInput({
                                 value={task.substring(2)}
                                 onChange={(e) => {
                                   const t = [...temp.infos];
-                                  t[i] = t[i][0] + e.target.value;
+                                  t[i] = t[i][0] + t[i][1] + e.target.value;
                                   setTemp({
                                     ...temp,
                                     infos: t,

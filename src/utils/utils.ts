@@ -1,4 +1,4 @@
-import { slotType, tableStyleType } from "./types";
+import { recType, slotType, tableStyleType } from "./types";
 
 export function formatHHMM(date: Date) {
   const hours = date.getHours();
@@ -97,7 +97,7 @@ export function dayFromToday(date1: Date) {
   const d1 = new Date(date1);
   const d2 = new Date();
 
-  const timeDiff = Math.abs(d1.getTime() - d2.getTime());
+  const timeDiff = d1.getTime() - d2.getTime();
 
   return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 }
@@ -106,4 +106,97 @@ export function calcSlotDay(i: number) {
   const today = new Date();
   today.setDate(today.getDate() + i);
   return today;
+}
+
+export function slotReshaper(
+  arr?: slotType[]
+): Record<string, { title: string; infos: string[] }> {
+  if (arr) {
+    const newArr = arr.reduce(
+      (
+        res: Record<string, { title: string; infos: string[] }>,
+        { date, infos, title }
+      ) => {
+        res[convertToMilliseconds(date)] = { title, infos };
+        return res;
+      },
+      {}
+    );
+    return newArr;
+  }
+  return {};
+}
+
+export function weeklyReshaper(
+  arr?: slotType[]
+): Record<string, { title: string; infos: string[] }> {
+  if (arr) {
+    const newArr = arr.reduce(
+      (
+        res: Record<string, { title: string; infos: string[] }>,
+        { date, infos, title }
+      ) => {
+        res[processWeekly(date)] = { title, infos };
+        return res;
+      },
+      {}
+    );
+    return newArr;
+  }
+  return {};
+}
+
+function convertToMilliseconds(str: string): number {
+  const year: number = parseInt(str.substring(0, 4), 10);
+  const month: number = parseInt(str.substring(4, 6), 10) - 1;
+  const day: number = parseInt(str.substring(6, 8), 10);
+
+  const timePart: string = str.substring(8);
+
+  let hour: number = 0;
+  let minute: number = 0;
+
+  if (timePart.length === 1 || timePart.length === 2) {
+    hour = parseInt(timePart, 10);
+  } else if (timePart.length === 3 || timePart.length === 4) {
+    hour = parseInt(timePart.substring(0, timePart.length - 2), 10);
+    minute = parseInt(timePart.substring(timePart.length - 2), 10);
+  }
+
+  const date: Date = new Date(year, month, day, hour, minute);
+
+  return date.getTime();
+}
+
+function processWeekly(s: string): string {
+  const today: Date = new Date();
+  const toCompare: number = today.getDay();
+  const diff =
+    toCompare > Number(s[0])
+      ? 7 + Number(s[0]) - toCompare
+      : Number(s[0]) - toCompare;
+  today.setDate(today.getDate() + diff);
+  today.setHours(0, 0, 0, 0);
+
+  return today.getTime() + s.substring(1);
+}
+
+function addOneWeek(item: string) {
+  const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
+  const [timestamp, suffix] = [item.slice(0, 13), item.substring(14)];
+  const updatedTimestamp = Number(timestamp) + millisecondsInAWeek;
+  return `${updatedTimestamp}_${suffix}`;
+}
+
+export function duplicateWeeklyObject(obj: recType | undefined): recType {
+  const updatedObject: recType | undefined = {};
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newKey = addOneWeek(key);
+      updatedObject[newKey] = obj[key];
+    }
+  }
+
+  return { ...obj, ...updatedObject };
 }

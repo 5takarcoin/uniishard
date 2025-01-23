@@ -34,3 +34,10 @@ export interface priorityType {
   name: string;
   color: string;
 }
+
+export interface recType {
+  [key: string]: {
+    title: string;
+    infos: string[];
+  };
+}

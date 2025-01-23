@@ -12,7 +12,7 @@ export default function Application() {
     <SidebarProvider>
       <div className="w-full flex flex-col min-h-screen">
         <Navbar />
-        <div className="flex w-full gap-12 h-full ">
+        <div className="flex w-full gap-8 h-full ">
           <div className="basis-1/5">
             <AppSidebar i={ind} setInd={setInd} />
           </div>
@@ -21,7 +21,7 @@ export default function Application() {
               <Upcomings />
             </div>
           ) : (
-            <div className="basis-4/5 mt-12 flex flex-col gap-12 flex-grow items-start justify-start">
+            <div className="basis-4/5 mt-8 flex flex-col gap-12 flex-grow items-start justify-start">
               <Calendar ind={ind} />
             </div>
           )}
