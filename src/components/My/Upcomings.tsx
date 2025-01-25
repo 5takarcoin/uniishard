@@ -1,5 +1,6 @@
-import { useProfileQuery } from "@/store/services/dataApi";
+import { useNewSlotMutation, useProfileQuery } from "@/store/services/dataApi";
 import {
+  dateInNumber,
   dayFromToday,
   duplicateWeeklyObject,
   slotReshaper,
@@ -9,12 +10,14 @@ import { Check, RefreshCcw } from "lucide-react";
 import { Button } from "../ui/button";
 import { recType } from "@/utils/types";
 import { priorityConv } from "@/utils/data";
+import { useState } from "react";
 // import { getContrastColor } from "@/lib/colorUtils";
 
 export default function Upcomings() {
   const { data, refetch } = useProfileQuery(undefined);
-  const str = priorityConv["D"];
-  console.log(str[1]);
+
+  const [newSlot] = useNewSlotMutation();
+
   const processed: recType | undefined = data?.user.tables
     .map((d) => slotReshaper(d.slots))
     .reduce((acc, obj, index) => {
@@ -37,14 +40,35 @@ export default function Upcomings() {
       return acc;
     }, {});
   processedW = duplicateWeeklyObject({ ...processedW });
-  const all = { ...processedW, ...processed };
+
+  const [all, setAll] = useState({ ...processedW, ...processed });
+  // const all = { ...processedW, ...processed };
 
   const arr = Object.keys(all);
-  console.log(processedW);
 
   const sp = (k: string) => {
     const m = new Date(Number(k.split("_")[0].slice(0, 13)));
     return m;
+  };
+
+  const check = (arr: string[], s: string) => {
+    return arr.filter((task) => {
+      // console.log(
+      //   `${task} er jonno ${
+      //     (task[0] === "D" && dayFromToday(sp(s)) <= 7) ||
+      //     (task[0] === "G" && dayFromToday(sp(s)) <= 3) ||
+      //     (task[0] === "S" && dayFromToday(sp(s)) <= 1) ||
+      //     (task[0] === "N" && dayFromToday(sp(s)) == 0)
+      //   } ${dayFromToday(sp(s))}`
+      // );
+
+      return (
+        (task[0] === "D" && dayFromToday(sp(s)) <= 10) ||
+        (task[0] === "G" && dayFromToday(sp(s)) <= 3) ||
+        (task[0] === "S" && dayFromToday(sp(s)) <= 2) ||
+        (task[0] === "N" && dayFromToday(sp(s)) <= 1)
+      );
+    });
   };
 
   return (
@@ -54,16 +78,10 @@ export default function Upcomings() {
           <RefreshCcw />
         </Button>
       </div>
-      <div className="flex flex-col gap-2">
-        {arr.map((k, i) => (
-          <div key={k + i} className="">
-            {/*
-           {new Date(Number(k.split("_")[0])).toLocaleDateString()}
-           {" ----------------- "}
-           {Number(k.split("_")[0])}
-           {" ----------------- "} */}
-            {/* {new Date(Number(k.split("_")[0].slice(0, 13))).toString} */}
-            {dayFromToday(sp(k)) <= 7 && dayFromToday(sp(k)) >= 0 && (
+      <div className="flex flex-col">
+        {arr.map((k, een) => (
+          <div key={k + "top" + een} className="">
+            {dayFromToday(sp(k)) >= 0 && check(all[k]?.infos, k).length > 0 && (
               <div
                 style={{
                   borderColor:
@@ -72,7 +90,7 @@ export default function Upcomings() {
                   //   data?.user.tables[Number(k.split("_")[1])]?.color || ""
                   // ),
                 }}
-                className="border p-2 w-96 flex items-center justify-between px-4 rounded-sm"
+                className="border mb-2 p-2 w-96 flex items-center justify-between px-4 rounded-sm"
               >
                 <div className="flex w-full flex-col gap-2">
                   <div className="flex items-center gap-4 w-full">
@@ -90,46 +108,86 @@ export default function Upcomings() {
                       {sp(k).toLocaleDateString("en-GB")}
                     </p>
                   </div>
-                  {all &&
-                    all[k]?.infos.map((task, i) => (
-                      <div key={i} className="flex justify-between">
-                        <div className="flex gap-2 items-center">
-                          <Button
-                            variant={"ghost"}
-                            className={`h-8 w-8 rounded-full border 
+                  {check(all[k]?.infos, k).map((task, i) => (
+                    <div
+                      key={k + een + i}
+                      className="flex justify-between pb-2"
+                    >
+                      <div className="flex gap-2 items-center">
+                        <Button
+                          onClick={async () => {
+                            let newAll = { ...all };
+                            const updated = `${task[0]}${
+                              task[1] === "1" ? "0" : "1"
+                            }${task.substring(2)}`;
+                            newAll[k].infos = [
+                              ...newAll[k].infos.map((k, ind) =>
+                                i === ind ? updated : k
+                              ),
+                            ];
+                            console.log("figure out  ", k);
+                            setAll(newAll);
+
+                            await newSlot({
+                              body: {
+                                title: all[k]?.title,
+                                infos: newAll[k].infos,
+                                date:
+                                  dateInNumber(sp(k)) +
+                                  k.split("_")[0].substring(13),
+                              },
+                              id: data?.user.tables[Number(k.split("_")[1])]
+                                ?._id,
+                            });
+                          }}
+                          variant={"ghost"}
+                          className={`h-8 w-8 rounded-full border 
                             ${
                               task[1] === "1" &&
                               "bg-green-600 hover:bg-green-500"
                             }
                             `}
-                          >
-                            {task[1] === "1" && <Check />}
-                          </Button>
-                          <p>{task.substring(2)}</p>
-                        </div>
-                        <div className="flex gap-2 justify-between items-center">
-                          <div
-                            style={{
-                              backgroundColor: priorityConv[task[0]]?.[1],
-                            }}
-                            className={`h-4 w-4 ${
-                              task[0] === "N" && "border border-[#dddddd]"
-                            } rounded-full`}
-                          ></div>
-                          <span
-                            style={{
-                              color:
-                                task[0] === "N"
-                                  ? "#dddddd"
-                                  : priorityConv[task[0]]?.[1],
-                            }}
-                          >
-                            {priorityConv[task[0]]?.[0]}
-                          </span>{" "}
-                          {/* <p>{priorityConv[task[0]]?.[0]}</p> */}
-                        </div>
+                        >
+                          {task[1] === "1" && <Check />}
+                        </Button>
+                        <p
+                          className={
+                            task[1] === "1" ? " line-through opacity-20" : ""
+                          }
+                          style={
+                            task[0] === "N"
+                              ? {}
+                              : {
+                                  color: priorityConv[task[0]]?.[1],
+                                }
+                          }
+                        >
+                          {task.substring(2)}
+                        </p>
                       </div>
-                    ))}
+                      <div className="flex gap-2 justify-between items-center">
+                        <div
+                          style={{
+                            backgroundColor: priorityConv[task[0]]?.[1],
+                          }}
+                          className={`h-4 w-4 ${
+                            task[0] === "N" && "border border-[#dddddd]"
+                          } rounded-full`}
+                        ></div>
+                        <span
+                          style={{
+                            color:
+                              task[0] === "N"
+                                ? "#dddddd"
+                                : priorityConv[task[0]]?.[1],
+                          }}
+                        >
+                          {priorityConv[task[0]]?.[0]}
+                        </span>{" "}
+                        {/* <p>{priorityConv[task[0]]?.[0]}</p> */}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

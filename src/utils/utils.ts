@@ -117,7 +117,10 @@ export function slotReshaper(
         res: Record<string, { title: string; infos: string[] }>,
         { date, infos, title }
       ) => {
-        res[convertToMilliseconds(date)] = { title, infos };
+        res[`${convertToMilliseconds(date)}${date.substring(8)}`] = {
+          title,
+          infos,
+        };
         return res;
       },
       {}
@@ -151,19 +154,19 @@ function convertToMilliseconds(str: string): number {
   const month: number = parseInt(str.substring(4, 6), 10) - 1;
   const day: number = parseInt(str.substring(6, 8), 10);
 
-  const timePart: string = str.substring(8);
+  // const timePart: string = str.substring(8);
 
-  let hour: number = 0;
-  let minute: number = 0;
+  // let hour: number = 0;
+  // let minute: number = 0;
 
-  if (timePart.length === 1 || timePart.length === 2) {
-    hour = parseInt(timePart, 10);
-  } else if (timePart.length === 3 || timePart.length === 4) {
-    hour = parseInt(timePart.substring(0, timePart.length - 2), 10);
-    minute = parseInt(timePart.substring(timePart.length - 2), 10);
-  }
+  // if (timePart.length === 1 || timePart.length === 2) {
+  //   hour = parseInt(timePart, 10);
+  // } else if (timePart.length === 3 || timePart.length === 4) {
+  //   hour = parseInt(timePart.substring(0, timePart.length - 2), 10);
+  //   minute = parseInt(timePart.substring(timePart.length - 2), 10);
+  // }
 
-  const date: Date = new Date(year, month, day, hour, minute);
+  const date: Date = new Date(year, month, day);
 
   return date.getTime();
 }
@@ -183,9 +186,9 @@ function processWeekly(s: string): string {
 
 function addOneWeek(item: string) {
   const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
-  const [timestamp, suffix] = [item.slice(0, 13), item.substring(14)];
+  const [timestamp, suffix] = [item.slice(0, 13), item.substring(13)];
   const updatedTimestamp = Number(timestamp) + millisecondsInAWeek;
-  return `${updatedTimestamp}_${suffix}`;
+  return `${updatedTimestamp}${suffix}`;
 }
 
 export function duplicateWeeklyObject(obj: recType | undefined): recType {
@@ -194,7 +197,7 @@ export function duplicateWeeklyObject(obj: recType | undefined): recType {
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const newKey = addOneWeek(key);
-      updatedObject[newKey] = obj[key];
+      updatedObject[newKey] = { ...obj[key] };
     }
   }
 

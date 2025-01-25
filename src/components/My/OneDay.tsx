@@ -64,6 +64,7 @@ export default function OneDay({
           >
             <div className="w-full rounded-md h-12 border flex items-center justify-center">
               <SlotInput
+                ind={ind}
                 color={color}
                 exist={
                   slots

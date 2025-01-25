@@ -35,12 +35,14 @@ export function SlotInput({
   s,
   exist,
   color = "#000000",
+  ind,
 }: {
   dateStr: number;
   s: string;
   date: Date;
   exist?: { title: string; infos: string[] };
   color?: string;
+  ind: number;
 }) {
   const [title, setTitle] = useState(exist?.title || "");
   const [inp, setInp] = useState("");
@@ -61,9 +63,10 @@ export function SlotInput({
     try {
       setTitle(temp.title);
       setInfos(temp.infos);
+      console.log(ind);
       await newSlot({
         body: { ...temp, date: dateStr },
-        id: data?.user.tables[0]?._id,
+        id: data?.user.tables[ind]?._id,
       });
     } catch (error) {
       console.log(error);
