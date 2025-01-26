@@ -40,56 +40,58 @@ export function LoginCard() {
     }
   };
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle className="text-center text-xl">Log In</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription></CardDescription>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-2">
-              {/* <Label htmlFor="name">Username</Label> */}
-              <Input
-                id="username"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
+    <div className="w-full h-full flex items-center justify-center">
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle className="text-center text-xl">Log In</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CardDescription></CardDescription>
+          <form>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-2">
+                {/* <Label htmlFor="name">Username</Label> */}
+                <Input
+                  id="username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                {/* <Label htmlFor="name">Username</Label> */}
+                <Input
+                  id="password"
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <p
+                className={
+                  message === "Login Successful"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+              >
+                {message}
+              </p>
             </div>
-            <div className="flex flex-col space-y-2">
-              {/* <Label htmlFor="name">Username</Label> */}
-              <Input
-                id="password"
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <p
-              className={
-                message === "Login Successful"
-                  ? "text-green-500"
-                  : "text-red-500"
-              }
-            >
-              {message}
-            </p>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col justify-between">
-        <Button onClick={handleClick} className="w-full">
-          {isLoading ? <Hourglass /> : "Log in"}
-        </Button>
-        <p className="pt-4 text-gray-400">
-          Don't have an account?
-          <Button className="-ml-2 text-gray-200" variant={"link"}>
-            <Link to={"/signup"}>Sign up</Link>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col justify-between">
+          <Button onClick={handleClick} className="w-full">
+            {isLoading ? <Hourglass /> : "Log in"}
           </Button>
-        </p>
-      </CardFooter>
-    </Card>
+          <p className="pt-4 text-gray-400">
+            Don't have an account?
+            <Button className="-ml-2 text-gray-200" variant={"link"}>
+              <Link to={"/signup"}>Sign up</Link>
+            </Button>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

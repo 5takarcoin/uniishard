@@ -37,53 +37,55 @@ export function SignUpCard() {
     }
   };
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle className="text-center  text-xl">Sign up</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+    <div className="w-full h-full flex items-center justify-center">
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle className="text-center  text-xl">Sign up</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <p>{message}</p>
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <p>{message}</p>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col">
-        <Button onClick={handleClick} className="w-full">
-          Sign up
-        </Button>
-        <p className="pt-4 text-gray-400">
-          Already have an account?
-          <Button className="-ml-2 text-gray-200" variant={"link"}>
-            <Link to={"/login"}>Log in</Link>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col">
+          <Button onClick={handleClick} className="w-full">
+            Sign up
           </Button>
-        </p>
-      </CardFooter>
-    </Card>
+          <p className="pt-4 text-gray-400">
+            Already have an account?
+            <Button className="-ml-2 text-gray-200" variant={"link"}>
+              <Link to={"/login"}>Log in</Link>
+            </Button>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

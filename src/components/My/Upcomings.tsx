@@ -72,8 +72,8 @@ export default function Upcomings() {
   };
 
   return (
-    <div>
-      <div>
+    <div className=" border-transparent">
+      <div className="-translate-y-4">
         <Button variant={"ghost"} onClick={refetch}>
           <RefreshCcw />
         </Button>

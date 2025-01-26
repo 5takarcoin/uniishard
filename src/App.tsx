@@ -10,7 +10,7 @@ function App() {
   const { data, isFetching } = useProfileQuery(undefined);
 
   return (
-    <div className="bg-gray-900 min-h-screen flex items-center justify-center">
+    <div className=" w-[calc(100vw-calc(100vw-100%))] h-screen">
       <Routes>
         <Route
           path="/"

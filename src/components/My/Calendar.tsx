@@ -18,39 +18,41 @@ export default function Calendar({ ind }: { ind: number }) {
     : [];
 
   return (
-    <div className="">
+    <div className=" h-full w-full">
       {currTable?.schema?.name ? (
         <div className="space-y-4">
-          <div className="flex drop-shadow-md  justify-center bg-background">
-            <div className="p-2 border rounded-l-md border-r-0">
-              <Hours color={currTable.color} demo={slots} />
-            </div>
-            <CalendarContainer>
-              {currTable.schema && (
-                <>
-                  <div className="flex items-start justify-between gap-2">
-                    {Array.from({ length: numOfDays }).map((_, i) => (
-                      <OneDay
-                        color={currTable.color}
-                        ind={ind}
-                        key={i}
-                        day={calcSlotDay(i)}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </CalendarContainer>
-          </div>
           <div>
             <Slider
-              className="py-4 mx-auto"
+              className="pb-4 mx-auto"
               defaultValue={[numOfDays]}
               min={6}
               max={40}
               step={1}
               onValueChange={(e) => setNumOfDays(e[0])}
             />
+          </div>
+          <div className="flex drop-shadow-md  justify-start bg-background">
+            <div className="p-2 border rounded-l-md border-r-0">
+              <Hours color={currTable.color} demo={slots} />
+            </div>
+            <div className=" flex-1 overflow-x-hidden">
+              <CalendarContainer>
+                {currTable.schema && (
+                  <>
+                    <div className="flex items-start gap-2 md">
+                      {Array.from({ length: numOfDays }).map((_, i) => (
+                        <OneDay
+                          color={currTable.color}
+                          ind={ind}
+                          key={i}
+                          day={calcSlotDay(i)}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </CalendarContainer>
+            </div>
           </div>
         </div>
       ) : (
