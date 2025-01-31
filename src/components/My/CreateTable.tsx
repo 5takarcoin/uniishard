@@ -26,7 +26,13 @@ import SelectExistingTable from "./SelectExistingTable";
 import { Input } from "../ui/input";
 import { CirclePicker } from "react-color";
 
-export function CreateTable({ change = false }: { change?: boolean }) {
+export function CreateTable({
+  setToggle,
+  change = false,
+}: {
+  change?: boolean;
+  setToggle: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [existing, setExisting] = useState(true);
   const [currentTable, setCurrentTable] = useState<tableStyleType | null>(null);
   const [name, setName] = useState("");
@@ -71,7 +77,12 @@ export function CreateTable({ change = false }: { change?: boolean }) {
   };
 
   return (
-    <Dialog onOpenChange={() => setWeeklies([])}>
+    <Dialog
+      onOpenChange={() => {
+        setWeeklies([]);
+        setToggle(false);
+      }}
+    >
       <DialogTrigger asChild>
         <Button className="p-8 w-48" variant="outline">
           {!change ? "Create" : "Change"} Table <Plus />
@@ -79,7 +90,7 @@ export function CreateTable({ change = false }: { change?: boolean }) {
       </DialogTrigger>
       <DialogContent
         //  className="w-[425px]"
-        className="w-[900px] max-w-none h-[600px]"
+        className="w-[200px] md:w-[700px] lg:w-[900px] max-w-none h-[600px]"
       >
         <DialogHeader>
           <DialogTitle className="text-center">Table Shape</DialogTitle>

@@ -20,7 +20,7 @@ export default function Hours({
       {/* Times */}
       <div
         style={{ backgroundColor: color, color: textColor }}
-        className="w-32 text-center rounded-md p-2 border"
+        className="text-xs md:text-base w-24 md:w-32 text-center rounded-md p-2 border"
       >
         Time
       </div>
@@ -28,7 +28,7 @@ export default function Hours({
         <div
           key={i}
           style={{ backgroundColor: color, color: textColor }}
-          className="rounded-md h-12 border flex items-center justify-center"
+          className="rounded-md h-11 md:h-12 border flex items-center justify-center"
         >
           <Slot slot={slot} />
         </div>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
+import logo from "../../../public/logo.svg";
 
 export default function Home() {
   return (
@@ -11,14 +12,12 @@ export default function Home() {
       <div className="h-[500px] flex ">
         <main className="bg-slate-50000 w-1/2 flex flex-col justify-center">
           <h1 className="text-8xl font-bold mb-4 leading-[.8]">
-            <span>UNI</span> <span className="text-6xl">IS</span>
-            <div className="-mt-7 -mb-2">{"-------"}</div>
-            <span className="text-red-500">HARD</span>
+            <img src={logo} alt="Logo" className="w-96" />
           </h1>
           <p>Never forget your quizes</p>
           <p>Never forget your deadlines</p>
           <div className="py-4 flex gap-4">
-            <Button variant={"destructive"}>
+            <Button variant={"default"}>
               <Link to={"/login"}>Login</Link>
             </Button>
             <Button variant={"outline"}>

@@ -9,22 +9,25 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
-import { useState } from "react";
 import { useProfileQuery } from "@/store/services/dataApi";
 import { ArrowRightIcon, Eye, EyeOff } from "lucide-react";
 import { CreateTable } from "./CreateTable";
+import React from "react";
 
 export function AppSidebar({
   i,
   setInd,
+  setToggle,
+  arr,
+  setArr,
 }: {
+  setToggle: React.Dispatch<React.SetStateAction<boolean>>;
   i: number;
   setInd: React.Dispatch<React.SetStateAction<number>>;
+  arr: number[];
+  setArr: React.Dispatch<React.SetStateAction<number[]>>;
 }) {
-  const { data, refetch } = useProfileQuery(undefined);
-  const l: number = data?.user?.tables?.length!;
-  const a = Array.from({ length: l }, () => 1);
-  const [arr, setArr] = useState(a);
+  const { data } = useProfileQuery(undefined);
 
   const handleToggle = (ind: number) => {
     const temp = [...arr];
@@ -46,8 +49,8 @@ export function AppSidebar({
                   <div className="">
                     <Button
                       onClick={() => {
-                        refetch();
                         setInd(-1);
+                        setToggle(true);
                       }}
                       variant={"ghost"}
                       className={`${
@@ -65,7 +68,7 @@ export function AppSidebar({
 
           <SidebarGroup>
             <SidebarGroupContent>
-              <CreateTable />
+              <CreateTable setToggle={setToggle} />
             </SidebarGroupContent>
           </SidebarGroup>
           {/* <Collapsible> */}
@@ -97,7 +100,10 @@ export function AppSidebar({
                         {item === 0 ? <EyeOff /> : <Eye />}
                       </Button>
                       <Button
-                        onClick={() => setInd(ind)}
+                        onClick={() => {
+                          setInd(ind);
+                          setToggle(true);
+                        }}
                         variant={"ghost"}
                         className={`${
                           ind === i ? "text-blue-400" : ""

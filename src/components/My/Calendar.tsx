@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CalendarContainer from "./CalendarContainer";
 import { Slider } from "@/components/ui/slider";
-import { CreateTable } from "./CreateTable";
+// import { CreateTable } from "./CreateTable";
 import OneDay from "./OneDay";
 import Hours from "./Hours";
 // import { tableType } from "@/utils/types";
@@ -31,7 +31,8 @@ export default function Calendar({ ind }: { ind: number }) {
               onValueChange={(e) => setNumOfDays(e[0])}
             />
           </div>
-          <div className="flex drop-shadow-md  justify-start bg-background">
+          <div className="flex drop-shadow-md  justify-start bg-background ">
+            {/* shadow-[inset_0_-100px_80px_rgba(255,255,255,0.03)] */}
             <div className="p-2 border rounded-l-md border-r-0">
               <Hours color={currTable.color} demo={slots} />
             </div>
@@ -61,7 +62,7 @@ export default function Calendar({ ind }: { ind: number }) {
             Create Table <Plus />
           </Button> */}
           <p>Meow</p>
-          <CreateTable />
+          {/* <CreateTable /> */}
         </div>
       )}
       {/* {currTable?.schema?.name && <CreateTable change />} */}
