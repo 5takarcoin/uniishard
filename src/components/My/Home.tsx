@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
-import logo from "../../../public/logo.svg";
+import logo from "/logo.svg";
 
 export default function Home() {
   return (

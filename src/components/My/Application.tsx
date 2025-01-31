@@ -39,7 +39,7 @@ export default function Application() {
                 onClick={() => {
                   setToggle(true);
                 }}
-                className="md:hidden z-[100] bg-black/60 h-full w-full absolute"
+                className="md:hidden z-[39] bg-black/60 h-full w-full absolute"
               ></div>
             )}
             <div className="h-full max-w-full p-8">

@@ -20,7 +20,7 @@ export default function CalCal({
   return (
     <div className="flex flex-col">
       {currTable && (
-        <div className="flex flex-col h-[420px] w-[610px] ">
+        <div className="flex flex-col h-[420px] w-[426px] lg:w-[610px] ">
           <CalendarContainer small>
             {currTable && (
               <>

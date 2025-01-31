@@ -90,14 +90,14 @@ export function CreateTable({
       </DialogTrigger>
       <DialogContent
         //  className="w-[425px]"
-        className="w-[200px] md:w-[700px] lg:w-[900px] max-w-none h-[600px]"
+        className="w-[200px]  md:w-[700px] lg:w-[900px] max-w-none h-[600px]"
       >
         <DialogHeader>
           <DialogTitle className="text-center">Table Shape</DialogTitle>
         </DialogHeader>
         <DialogDescription></DialogDescription>
         <div className="flex w-full h-[450px]">
-          <div className="flex-[1]">
+          <div className="flex-1">
             {/* <Input value={name} onChange={(e) => setName(e.target.value)} /> */}
             {!existing ? (
               <NewSchema setShape={setShape} />
@@ -105,7 +105,7 @@ export function CreateTable({
               <div className="m-auto mb-8">
                 <Button
                   onClick={() => setExisting(false)}
-                  className="p-8 text-sm"
+                  className="px-6 py-8 lg:p-8 text-sm"
                   variant="outline"
                 >
                   Create New Shape <Plus />
@@ -119,22 +119,25 @@ export function CreateTable({
                   <Label className="h-[1rem] px-2">Or</Label>
                   <div className="h-[1px] bg-gray-500/50 flex-1"></div>
                 </div>
-                <div className="flex items-center gap-2 mt-4">
-                  <Label className="text-md ">Select Existing</Label>
-                  <Button
-                    onClick={refetch}
-                    className="text-md mt-1 px-3 rounded-full"
-                    variant={"ghost"}
-                  >
-                    <RefreshCcw />
-                  </Button>
-                  <Button
-                    onClick={() => setCurrentTable({} as tableStyleType)}
-                    className="text-md mt-1 px-3 rounded-full"
-                    variant={"ghost"}
-                  >
-                    <X />
-                  </Button>
+                <div className="flex  justify-between items-center gap-2 mt-4">
+                  {/* <div className="flex lg:flex-row flex-col-reverse lg:justify-between lg:items-center gap-2 mt-0 lg:mt-4"> */}
+                  <Label className="text-md w-[110px]">Select Existing</Label>
+                  <div className="flex">
+                    <Button
+                      onClick={refetch}
+                      className="mt-1 px-3 rounded-full"
+                      variant={"ghost"}
+                    >
+                      <RefreshCcw />
+                    </Button>
+                    <Button
+                      onClick={() => setCurrentTable({} as tableStyleType)}
+                      className="mt-1 px-3 rounded-full"
+                      variant={"ghost"}
+                    >
+                      <X />
+                    </Button>
+                  </div>
                 </div>
                 <div className="mt-2">
                   <SelectExistingTable
@@ -148,20 +151,20 @@ export function CreateTable({
             )}
           </div>
           <div className="w-[1px] bg-gray-500/30 mx-4 mb-2" />
-          <div className="w-full flex-1 flex flex-col gap-2">
+          <div className="w-full flex-[2] lg:flex-1 flex flex-col gap-2">
             <div className="flex items-center gap-4">
               <Label>Name</Label>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 w-72"
+                className="mt-1 w-40 lg:w-72"
               ></Input>
               <Label>Color</Label>
               <Input
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
                 maxLength={7}
-                className="mt-1 w-36 font-mono tracking-widest"
+                className="mt-1 md:w-24 lg:w-36 font-mono tracking-widest"
                 onFocus={() => setOpenColor(false)}
               ></Input>
 
@@ -203,7 +206,7 @@ export function CreateTable({
                 (!existing && !shape?.name)) && (
                 <div className="w-full h-full border flex items-center justify-center">
                   <DialogDescription className="text-center">
-                    <span className="">
+                    <span className="text-sm">
                       Select a Table <br />
                       or <br />
                       Create a new one
@@ -227,7 +230,7 @@ export function CreateTable({
                 type="button"
                 variant="outline"
               >
-                <span className="-ml-2">
+                <span className="-ml-2 ">
                   <ChevronLeft />
                 </span>{" "}
                 Select Existing

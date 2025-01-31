@@ -2,7 +2,7 @@ import { useLogoutMutation } from "@/store/services/authApi";
 import { Button } from "../ui/button";
 import { useProfileQuery } from "@/store/services/dataApi";
 import { Hourglass, MenuIcon } from "lucide-react";
-import logo from "../../../public/logo.svg";
+import logo from "/logo.svg";
 
 export default function Navbar({
   setToggle,
