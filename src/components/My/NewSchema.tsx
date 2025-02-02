@@ -62,32 +62,44 @@ export default function NewSchema({
           </div>
         </span>
       </div>
-      <div>
-        <Label>Start</Label>
-        <TimePickerTime
-          date={selectedStartTime}
-          setDate={setSelectedStartTime}
-        />
-      </div>
-      <div>
-        <Label>End</Label>
-        <TimePickerTime date={selectedEndTime} setDate={setSelectedEndTime} />
-      </div>
-      <div>
-        <Label>Duration</Label>
-        <TimePickerTime
-          noPeriod
-          date={selectedDurationTime}
-          setDate={setSelectedDurationTime}
-        />
-      </div>
-      <div>
-        <Label>Interval</Label>
-        <TimePickerTime
-          noPeriod
-          date={selectedIntervalTime}
-          setDate={setSelectedIntervalTime}
-        />
+      <div className="flex md:flex-col gap-4 justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 md:block justify-between">
+            <Label className="">Start</Label>
+            <TimePickerTime
+              date={selectedStartTime}
+              setDate={setSelectedStartTime}
+            />
+          </div>
+
+          <div className="flex items-center gap-2 md:block justify-between">
+            <Label className="">End</Label>
+            <TimePickerTime
+              date={selectedEndTime}
+              setDate={setSelectedEndTime}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 md:block justify-between">
+            <Label className="">Duration</Label>
+            <TimePickerTime
+              noPeriod
+              date={selectedDurationTime}
+              setDate={setSelectedDurationTime}
+            />
+          </div>
+
+          <div className="flex items-center gap-2 md:block justify-between">
+            <Label className="">Interval</Label>
+            <TimePickerTime
+              noPeriod
+              date={selectedIntervalTime}
+              setDate={setSelectedIntervalTime}
+            />
+          </div>
+        </div>
       </div>
       <div className="mb-2"></div>
     </div>

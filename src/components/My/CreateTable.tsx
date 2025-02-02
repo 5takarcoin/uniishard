@@ -90,19 +90,23 @@ export function CreateTable({
       </DialogTrigger>
       <DialogContent
         //  className="w-[425px]"
-        className="w-[200px]  md:w-[700px] lg:w-[900px] max-w-none h-[600px]"
+        className="flex flex-col w-11/12 md:w-[700px] lg:w-[900px] rounded-md max-w-none h-[800px] md:h-[600px]"
       >
-        <DialogHeader>
-          <DialogTitle className="text-center">Table Shape</DialogTitle>
-        </DialogHeader>
-        <DialogDescription></DialogDescription>
-        <div className="flex w-full h-[450px]">
+        <div>
+          <DialogHeader>
+            <DialogTitle className="text-center">Table Shape</DialogTitle>
+          </DialogHeader>
+          <DialogDescription></DialogDescription>
+        </div>
+        <div className="flex flex-col md:flex-row w-full h-full">
           <div className="flex-1">
             {/* <Input value={name} onChange={(e) => setName(e.target.value)} /> */}
             {!existing ? (
-              <NewSchema setShape={setShape} />
+              <div className="">
+                <NewSchema setShape={setShape} />
+              </div>
             ) : (
-              <div className="m-auto mb-8">
+              <div className="m-auto mb-4 mt-4 md:mt-0 md:mb-8">
                 <Button
                   onClick={() => setExisting(false)}
                   className="px-6 py-8 lg:p-8 text-sm"
@@ -119,9 +123,19 @@ export function CreateTable({
                   <Label className="h-[1rem] px-2">Or</Label>
                   <div className="h-[1px] bg-gray-500/50 flex-1"></div>
                 </div>
-                <div className="flex  justify-between items-center gap-2 mt-4">
+                <div className="flex justify-between items-center gap-2 mt-2 md:mt-4">
                   {/* <div className="flex lg:flex-row flex-col-reverse lg:justify-between lg:items-center gap-2 mt-0 lg:mt-4"> */}
-                  <Label className="text-md w-[110px]">Select Existing</Label>
+                  <div className="flex items-center gap-4">
+                    <Label className="text-md w-[110px]">Select Existing</Label>
+                    <div className="mt-2 md:hidden">
+                      <SelectExistingTable
+                        currentTable={currentTable}
+                        setCurrentTable={setCurrentTable}
+                        tables={tables}
+                      />
+                    </div>
+                  </div>
+
                   <div className="flex">
                     <Button
                       onClick={refetch}
@@ -139,7 +153,7 @@ export function CreateTable({
                     </Button>
                   </div>
                 </div>
-                <div className="mt-2">
+                <div className="mt-2 hidden md:block">
                   <SelectExistingTable
                     currentTable={currentTable}
                     setCurrentTable={setCurrentTable}

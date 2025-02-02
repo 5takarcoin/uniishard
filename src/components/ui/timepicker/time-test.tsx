@@ -25,7 +25,10 @@ export function TimePickerTime({
   return (
     <div className="flex items-center gap-2">
       <div className="grid text-center">
-        <Label htmlFor="hours" className="text-xs text-gray-600">
+        <Label
+          htmlFor="hours"
+          className="text-xs text-gray-600 hidden md:block"
+        >
           Hours
         </Label>
         <TimePickerInput
@@ -38,7 +41,10 @@ export function TimePickerTime({
         />
       </div>
       <div className="grid text-center">
-        <Label htmlFor="minutes" className="text-xs text-gray-600">
+        <Label
+          htmlFor="minutes"
+          className="text-xs text-gray-600 hidden md:block"
+        >
           Minutes
         </Label>
         <TimePickerInput
@@ -56,7 +62,7 @@ export function TimePickerTime({
         <div className="grid text-center">
           <Label
             htmlFor="period"
-            className="h-[1rem] text-xs text-gray-600"
+            className="h-[1rem] text-xs text-gray-600 hidden md:block"
           ></Label>
           <TimePeriodSelect
             period={period}
