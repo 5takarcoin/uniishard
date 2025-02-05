@@ -92,7 +92,7 @@ export default function Upcomings({ ar }: { ar: number[] }) {
                     //   data?.user.tables[Number(k.split("_")[1])]?.color || ""
                     // ),
                   }}
-                  className="border mb-2 p-2 w-96 flex items-center justify-between px-4 rounded-sm"
+                  className="border mb-2 p-2  max-w-96 flex items-center justify-between px-4 rounded-sm"
                 >
                   <div className="flex w-full flex-col gap-2">
                     <div className="flex items-center gap-4 w-full">

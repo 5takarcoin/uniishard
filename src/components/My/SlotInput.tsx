@@ -94,8 +94,10 @@ export function SlotInput({
           }`}
           variant="ghost"
         >
-          {!deepEqual({ title, infos }, temp) && (
+          {!deepEqual({ title, infos }, temp) ? (
             <span className="text-yellow-400 text-xs font-thin">Unsaved</span>
+          ) : (
+            <span>{title}</span>
           )}
         </Button>
       </DialogTrigger>

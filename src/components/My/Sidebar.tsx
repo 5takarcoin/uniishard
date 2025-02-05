@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
 import { useProfileQuery } from "@/store/services/dataApi";
-import { ArrowRightIcon, Eye, EyeOff } from "lucide-react";
+import { ArrowRightIcon, Eye, EyeOff, Hourglass } from "lucide-react";
 import { CreateTable } from "./CreateTable";
 import React from "react";
+import { useLogoutMutation } from "@/store/services/authApi";
 
 export function AppSidebar({
   i,
@@ -27,7 +28,9 @@ export function AppSidebar({
   arr: number[];
   setArr: React.Dispatch<React.SetStateAction<number[]>>;
 }) {
-  const { data } = useProfileQuery(undefined);
+  const { data, refetch } = useProfileQuery(undefined);
+
+  const [logout, { isLoading }] = useLogoutMutation();
 
   const handleToggle = (ind: number) => {
     const temp = [...arr];
@@ -35,10 +38,21 @@ export function AppSidebar({
     setArr(temp);
   };
 
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    await logout(undefined);
+    refetch();
+  };
+
   return (
     <Sidebar collapsible="none" className="border-r bg-background w-full p-4">
       <SidebarContent>
         <SidebarGroup>
+          <div className="flex flex-col items-start gap-2 md:hidden mb-8">
+            <p className="border px-8 h-12 flex items-center rounded-full border-blue-500 p-4">
+              {data?.user?.name}
+            </p>
+          </div>
           <SidebarGroupLabel className="text-lg pb-4">
             Overview
           </SidebarGroupLabel>
@@ -119,6 +133,11 @@ export function AppSidebar({
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+            <div className="mt-8">
+              <Button onClick={handleLogout}>
+                {isLoading ? <Hourglass /> : "Log out"}
+              </Button>
+            </div>
           </SidebarGroupContent>
           {/* </Collapsible> */}
         </SidebarGroup>
